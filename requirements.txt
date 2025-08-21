@@ -1,0 +1,7 @@
+Django~=5.2.4
+django-bootstrap5
+crispy-bootstrap5
+django-crispy-forms
+django-formset
+django-widget-tweaks
+django-select2

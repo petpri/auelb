@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load crispy_forms_tags %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+
+<header>
+    {% block header %}
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        {{ form.media.css }}   
+        <form method="post">
+            <div class="col-auto mb-3 mx-1">
+                <input type="submit" class="btn btn-outline-success " value="SPEICHERN">
+                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success ">Liste</a>
+            </div>
+    </nav>  
+    {% endblock %}
+</header>
+
+{% block content %}
+        <br>
+        <br>
+        <br>
+        <br> 
+        {%csrf_token%}   
+        <div class="row">
+            <div class="col-4">
+                {{ form.kundenauftrag|as_crispy_field }}
+            </div>
+            <div class="col-4">
+                {{ form.kundenname|as_crispy_field }}
+            </div>
+            <div class="col-4">
+                {{ form.statuskundenauftrag|as_crispy_field }} <!--25.06.2025 dazu-->
+            </div>
+        </div>   
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {{ form.media.js }}
+   
+   
+{% endblock %}

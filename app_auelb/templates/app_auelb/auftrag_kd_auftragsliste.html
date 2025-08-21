@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+{% block header %}
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">      
+        <form method="get" class="row g-3">
+            <div class="col-auto mb-3 mx-2">
+                <input name="searchsuche" class="form-control" type="search"  placeholder="Kundenauftrag enthält">
+            </div>
+            <div class="col-auto mb-3 mx-2">
+                <select class="form-select" name="my_select">
+                    {% for item in data %}
+                            <option value="{{ item.id }}">{{ item.kd_auswahl }}</option>                       
+                    {% endfor %}
+                </select>
+            </div>
+        
+        <form method="post">
+            {%csrf_token%} 
+            <div class="col-auto mx-2 mb-3">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+                <a href="{%url 'auftrag_neu'%}" class="btn btn-outline-success">NEU</a>
+                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success">START</a>
+            </div>
+        </form>             
+    </nav>
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered table-sm fs-6 py-3 ">
+                <thead class="thead-dark sticky-top" >
+                    <tr class="table-warning">
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+
+                    </tr>
+                    <tr class="table-danger">
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                        <th>-</th>
+                    </tr>
+                    <tr class="table-danger">
+                        <th>A</th>
+                        <th>U</th>
+                        <th>O</th>
+                        <th>KD-Name</th>
+                        <th>KD-Auf</th>
+                        <th>FERT/BANF</th>
+                        <th>Material</th>
+                        <th>Bezeichnung</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Menge</th>
+                        <th>Endtermin</th>
+                        <th>STATUS</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody >
+                    {% for z in ihre_daten.all %}       
+                            <tr class="table-primary py-1">
+                                <td><a href="{%url 'kundenauftrag_bearbeiten' z.pk%}">A</a></td>
+                                <td><a href="{%url 'auftrag_auffrischen' z.pk%}">U</a></td>
+                                <td>{{z.id}}</td>
+                                <td>{{z.kundenauftrag}}</td>
+                                <td>{{z.kundenname}}</td>
+                                <td>{{z.kundenname.kundennummer}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ z.statuskundenauftrag }}</td>
+                                <!--<td>{{z.statuskundenauftrag }} {{ z.get_statuskundenauftrag_display }}</td>-->
+                                <td></td>
+                                
+                                
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    </form>
+{% endblock %}
+

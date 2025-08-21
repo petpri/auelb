@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+        {% load django_bootstrap5 %}
+        {%load crispy_forms_tags %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Peter's{% endblock %}</title>
+        {{ formset.media }}
+        <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+        <link href="{% static 'django_select2/django_select2.css' %}" rel="stylesheet">
+        <script src="{% static 'django_select2/django_select2.js' %}"></script>
+    </head>
+    <body>
+        <header>
+            <div class="container-sm pt-2">
+            {% block header %}
+        
+            {% endblock %}
+                </div>
+        </header>
+        <div class="container-sm pt-2">
+        {% block content %}
+       
+        {% endblock %}
+        </div>
+    </body>
+</html>
