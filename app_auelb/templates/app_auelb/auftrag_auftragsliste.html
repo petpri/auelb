@@ -8,27 +8,28 @@
 
 {% block header %}
 
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-    <form method="get" class="row g-1 align-items-center">
-        <div class="col-auto mx-1">
-            <input name="searchsuche" class="form-control form-control-sm"
-                   type="search" placeholder="Kundenauftrag enthält">
-        </div>
-        <div class="col-auto mx-1">
-            <select class="form-select form-select-sm" name="my_select">
-                {% for item in data %}
-                    <option value="{{ item.id }}">{{ item.kd_auswahl }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="col-auto mx-1">
-            <button type="submit" class="btn btn-outline-success btn-sm">Search</button>
-            <a href="{% url 'auftrag_neu' %}" class="btn btn-outline-success btn-sm">NEU</a>
-            <a href="{% url 'auftrag_kd_auftragsliste' %}" class="btn btn-outline-success btn-sm">Kundenaufträge</a>
-        </div>
-    </form>
-</nav>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">      
+        <form method="get" class="row g-3">
+            <div class="col-auto mb-3 mx-2">
+                <input name="searchsuche" class="form-control" type="search"  placeholder="Kundenauftrag enthält">
+            </div>
+            <div class="col-auto mb-3 mx-2">
+                <select class="form-select" name="my_select">
+                    {% for item in data %}
+                            <option value="{{ item.id }}">{{ item.kd_auswahl }}</option>                       
+                    {% endfor %}
+                </select>
+            </div>
+        
+        <form method="post">
+            {%csrf_token%} 
+            <div class="col-auto mx-2 mb-3">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+                <a href="{%url 'auftrag_neu'%}" class="btn btn-outline-success">NEU</a>
+                <a href="{%url 'auftrag_kd_auftragsliste'%}" class="btn btn-outline-success">Kundenaufträge</a>
+            </div>
+        </form>             
+    </nav>
 
 {% endblock %}
 
