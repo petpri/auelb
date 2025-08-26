@@ -40,9 +40,10 @@ def auftragsliste_view(request):
 # Kundenauftrag bearbeiten
 class KundenauftragUpdate(UpdateView):
     model=Kundenauftrag
+    form_class = KundenauftragForm
     template_name='app_auelb/kundenauftrag_bearbeiten.html'
-    fields=('id', 'kundenauftrag','kundenname','statuskundenauftrag') # 25.06.2025 dazu
-    success_url=reverse_lazy('auftrag_auftragsliste')
+    #fields=('id', 'kundenauftrag','kundenname','statuskundenauftrag') # 25.06.2025 dazu
+    #success_url=reverse_lazy('auftrag_auftragsliste')
 
     def get_success_url(self):
         return reverse_lazy('kundenauftrag_bearbeiten', kwargs={'pk': self.get_object().id})

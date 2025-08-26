@@ -18,7 +18,7 @@ class Kunde(models.Model):
     kundenname=models.CharField(max_length=50, verbose_name="Kundenname")
 
     def __str__(self):
-        return self.kundenname
+        return f"{self.kundenname} ({self.kundennummer})"
     
     class Meta:
         db_table='tbl_kunde'
@@ -44,7 +44,7 @@ class Material(models.Model):
     bezeichnung=models.CharField(max_length=39, verbose_name="Bezeichnung")
 
     def __str__(self):
-        return str(self.bezeichnung) 
+        return f"{self.bezeichnung} ({self.materialnummer})"
         
     
     class Meta:
@@ -73,7 +73,9 @@ class Produkt(models.Model):
 
 
     def __str__(self):
-        return str(self.bezeichnung)
+        return str(self.bezeichnung) 
+
+   
        
     class Meta:
         db_table='tbl_produkt'
@@ -100,8 +102,7 @@ class Komponente(models.Model):
     statuskomponente = models.ForeignKey(StatusKomponente, on_delete=models.CASCADE,default='---')
    
     def __str__(self):
-        return str(self.bezeichnung)
-       
+        return str(self.bezeichnung) 
     class Meta:
         db_table='tbl_komponente'
 

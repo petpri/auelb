@@ -4,47 +4,42 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
-
-    {% block header %}
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top"> 
-        <form method="get" class="row g-3 mx-3">
-            <div class="col-auto">
-                <input name="searchsuche" class="form-control mb-3 mx-1" type="search"  placeholder="Kundenauftrag enthält">
-            </div>
+{% block header %}
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <div class="container-fluid">
+        <!-- Aktionen -->
+        <form method="post" class="d-flex">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-success me-2">Speichern</button>
+            <a href="{% url 'auftrag_auftragsliste' %}" class="btn btn-outline-success">Liste</a>
         </form>
-        <form method="post">
-            <div class="col-auto ">
-                <button type="submit" class="btn btn-outline-success mb-3 mx-1">Search</button>
-                <input type="submit" class="btn btn-outline-success mb-3 mx-1" value="SPEICHERN">
-                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success mb-3">Liste</a>
-            </div> 
-    </nav> 
-    {% endblock %}
+    </div>
+</nav>
+{% endblock %}
 
+{% block content %}
+<div class="container mt-5 pt-5">
+    {{ form.media.css }}  {# CSS für JS-Widgets wie Select2 #}
+    <form method="post" id="auftrag-form">
+        {% csrf_token %}
 
-
-    {% block content %}
-        <br>
-        <br>
-        <br>
-        <br>    
-        
-        {%csrf_token%}   
-            <div class="row">
-                <div class="col-4">
-                    {{ form.kundenauftrag|as_crispy_field }}
-                </div>
-                <div class="col-4">
-                    {{ form.kundenname|as_crispy_field}}
-                </div>
-                <div class="col-4">
-                    {{ form.statuskundenauftrag|as_crispy_field }} <!--25.06.2025 dazu-->
-                </div>
+        <div class="row gx-3 gy-3">
+            <div class="col-md-4">
+                {{ form.kundenauftrag|as_crispy_field }}
             </div>
-        </form>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        {{ formset.media }}     
-    {% endblock %}
+            <div class="col-md-4">
+                {{ form.kundenname|as_crispy_field }}
+            </div>
+            <div class="col-md-4">
+                {{ form.statuskundenauftrag|as_crispy_field }}
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}  {# JavaScript für JS-Widgets wie Select2 #}
+{% endblock %}
 
 
 

@@ -99,7 +99,11 @@
                                 <td><a href="{%url 'auftrag_auffrischen' z.pk%}">U</a></td>
                                 <td>{{z.id}}</td>
                                 <td>{{z.kundenauftrag}}</td>
-                                <td>{{z.kundenname}}</td>
+                                <td>
+                                {% if z.kundenname %}
+                                    {{z.kundenname.kundenname}}
+                                {% endif %}
+                                </td>
                                 <td>{{z.kundenname.kundennummer}}</td>
                                 <td></td>
                                 <td></td>
@@ -124,13 +128,17 @@
                                 <td></td>
                                 <td></td>
                                 <td>{{y.p_fertigungsauftrag}}</td>
-                                <td>{{y.bezeichnung}}</td>
+                                <td>
+                                {% if y.bezeichnung %}
+                                    {{y.bezeichnung.bezeichnung}}
+                                {% endif %}
+                                </td>
                                 <td>{{y.bezeichnung.materialnummer}}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td>{{y.p_auftragsmenge}}</td>
-                                <td>{{y.p_endtermin}}</td>
+                                <td>{{y.p_endtermin|date:"d.m.Y"}}</td>
                                 <!--<td>{{y.statusprodukt }} {{ y.get_statusprodukt_display }}</td>-->
                                 <td>{{y.statusprodukt }}</td>
                                 <td></td>
@@ -148,13 +156,17 @@
                                     <td></td>
                                     <td></td> 
                                     <td>{{x.k_fertigungsauftrag}}</td>
-                                    <td>{{x.bezeichnung}}</td>
+                                    <td>
+                                    {% if x.bezeichnung %}
+                                        {{x.bezeichnung.bezeichnung}}
+                                    {% endif %}   
+                                    </td>
                                     <td>{{x.bezeichnung.materialnummer}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td> 
                                     <td>{{x.k_auftragsmenge}}</td> 
-                                    <td>{{x.k_endtermin}}</td> 
+                                    <td>{{x.k_endtermin|date:"d.m.Y"}}</td> 
                                     <td>{{x.statuskomponente }}</td>
                                     <td></td>
                                 {% endif %}                

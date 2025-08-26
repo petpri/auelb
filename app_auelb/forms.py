@@ -7,28 +7,45 @@ from django_select2.forms import ModelSelect2Widget
 
 
 
-class AuthorWidget(s2forms.ModelSelect2Widget):
+#class AuthorWidget(s2forms.ModelSelect2Widget):
+#    model = Kunde
+#    search_fields = [
+#        "kundenname__icontains",
+#    ]
+#    attrs = {"data-placeholder": "Kunden suchen", "style": "width: 300px;"}
+
+#class ProduktWidget(s2forms.ModelSelect2Widget):
+#    search_fields = [
+#        "bezeichnung__icontains",
+#    ]
+
+class KundeWidget(ModelSelect2Widget):
+    model = Kunde
     search_fields = [
         "kundenname__icontains",
+        "kundennummer__icontains",
     ]
 
-class ProduktWidget(s2forms.ModelSelect2Widget):
-    search_fields = [
-        "bezeichnung__icontains",
-    ]
+    def get_result_label(self, item):
+        return f"{item.kundenname} ({item.kundennummer})"
+
+    def get_selected_result_label(self, item):
+        return f"{item.kundenname}"
+    
+
 
 class KundenauftragForm(forms.ModelForm):
     class Meta:
         model = Kundenauftrag
         fields = ['kundenauftrag','kundenname', 'statuskundenauftrag'] # 25.06.2025: status_kundenauftrag dazu gefügt
         widgets = {
-            "kundenname": AuthorWidget,
+            "kundenname": KundeWidget(attrs={"data-placeholder": "Kunden suchen", "style": "width: 300px;"}),
         }
 
-class KundeForm(forms.ModelForm):
-    class Meta:
-        model = Kunde
-        fields = ['id','kundennummer', 'kundenname'] 
+#class KundeForm(forms.ModelForm):
+#    class Meta:
+#        model = Kunde
+#        fields = ['id','kundennummer', 'kundenname'] 
 
 
 class MaterialForm(forms.ModelForm):
@@ -42,37 +59,55 @@ class KomponenteForm(forms.ModelForm):
         model = Komponente
         fields=['id', 'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 'k_endtermin', 'statuskomponente']
 
+
+
+class MaterialWidget(ModelSelect2Widget):
+    model = Material
+    search_fields = ["bezeichnung__icontains", "materialnummer__icontains" ]
+    
+
+    # Wird in der Dropdown-Suche angezeigt
+    def get_result_label(self, item):
+        return f"{item.bezeichnung} ({item.materialnummer})"
+
+    # Nach Auswahl im Inputfeld (optional nur Bezeichnung)
+    def get_selected_result_label(self, item):
+        return f"{item.bezeichnung}"
+
+
+
+
 class ProduktForm(forms.ModelForm):
     class Meta:
         model = Produkt
-        fields=['kundenauftrag','bezeichnung','p_auftragsmenge','p_fertigungsauftrag','p_endtermin', 'statusprodukt']
+        fields = ['kundenauftrag','bezeichnung','p_auftragsmenge','p_fertigungsauftrag','p_endtermin', 'statusprodukt']
         widgets = {
-            "bezeichnung": ModelSelect2Widget(
-                model=Material,
-                search_fields=["bezeichnung__icontains"],
-                attrs={"data-placeholder": "Material suchen"}
-            ),
+            "bezeichnung": MaterialWidget(attrs={
+                "data-placeholder": "Material suchen",
+                "style": "width: 450px;"  # Breite des Feldes
+            }),
             "materialnummer": forms.TextInput(attrs={"readonly": "readonly"}),
         }
 
-Kd_formset = inlineformset_factory(Kundenauftrag, Produkt,form=ProduktForm, can_delete = False, extra=1,max_num=8, fields=['id','kundenauftrag','bezeichnung','p_auftragsmenge','p_fertigungsauftrag','p_endtermin', 'statusprodukt'],
-        widgets = {
-            "bezeichnung": ModelSelect2Widget(
-                model=Material,
-                search_fields=["bezeichnung__icontains"],
-                attrs={"data-placeholder": "Material suchen", "style": "width: 300px;" }
-            ),
-            "materialnummer": forms.TextInput(attrs={"readonly": "readonly"}),
-        })
-Prod_formset = inlineformset_factory(Produkt, Komponente, can_delete = False, extra=1,max_num=8,  fields=['id','product','bezeichnung','k_auftragsmenge','k_fertigungsauftrag','k_endtermin', 'statuskomponente'],
-        widgets = {
-            "bezeichnung": ModelSelect2Widget(
-                model=Material,
-                search_fields=["bezeichnung__icontains"],
-                attrs={"data-placeholder": "Material suchen", "style": "width: 300px;" }
-            ),
-            "materialnummer": forms.TextInput(attrs={"readonly": "readonly"}),
-        })
+Kd_formset = inlineformset_factory(
+    Kundenauftrag, 
+    Produkt,
+    form=ProduktForm, 
+    can_delete = False, 
+    extra=1,max_num=8, 
+    fields=['id','kundenauftrag','bezeichnung','p_auftragsmenge','p_fertigungsauftrag','p_endtermin', 'statusprodukt'],
+
+)
+Prod_formset = inlineformset_factory(
+    Produkt,
+    Komponente,
+    form=ProduktForm, 
+    can_delete=False,
+    extra=1,
+    max_num=8,
+    fields=['id','product','bezeichnung','k_auftragsmenge','k_fertigungsauftrag','k_endtermin', 'statuskomponente'],
+
+)
 
 
 class AuswahlForm_KD(forms.Form):
