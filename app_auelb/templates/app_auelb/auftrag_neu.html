@@ -1,42 +1,44 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 {% load crispy_forms_tags %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
-{% block header %}
 
 
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-    <div class="container-fluid">
-        <!-- Aktionen -->
-        <form method="post" class="d-flex">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-success me-2">Speichern</button>
-            <a href="{% url 'auftrag_auftragsliste' %}" class="btn btn-outline-success">Liste</a>
-        </form>
-    </div>
-</nav>
-{% endblock %}
+<header>
+    {% block header %}
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        {{ form.media.css }}   
+        <form method="post">
+            <div class="col-auto mb-3 mx-1">
+                <input type="submit" class="btn btn-outline-success " value="SPEICHERN">
+                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success ">Liste</a>
+            </div>
+    </nav>  
+    {% endblock %}
+</header>
 
 {% block content %}
-<div class="container mt-5 pt-5">
-    {{ form.media.css }}  {# CSS für JS-Widgets wie Select2 #}
-    <form method="post" id="auftrag-form">
-        {% csrf_token %}
-
-        <div class="row gx-3 gy-3">
-            <div class="col-md-4">
+        <br>
+        <br>
+        <br>
+        <br> 
+        {%csrf_token%}   
+        <div class="row">
+            <div class="col-4">
                 {{ form.kundenauftrag|as_crispy_field }}
             </div>
-            <div class="col-md-4">
+            <div class="col-4">
                 {{ form.kundenname|as_crispy_field }}
             </div>
-            <div class="col-md-4">
-                {{ form.statuskundenauftrag|as_crispy_field }}
+            <div class="col-4">
+                {{ form.statuskundenauftrag|as_crispy_field }} <!--25.06.2025 dazu-->
             </div>
-        </div>
+        </div>   
     </form>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-{{ form.media.js }}  {# JavaScript für JS-Widgets wie Select2 #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {{ form.media.js }}
+   
+   
 {% endblock %}
