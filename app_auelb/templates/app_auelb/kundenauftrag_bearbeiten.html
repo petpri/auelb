@@ -8,20 +8,21 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
     <div class="container-fluid">
         <!-- Aktionen -->
-        <form method="post" class="d-flex">
+        
+        <form method="post" class="d-flex" id="auftrag-form">
             {% csrf_token %}
             <button type="submit" class="btn btn-outline-success me-2">Speichern</button>
             <a href="{% url 'auftrag_auftragsliste' %}" class="btn btn-outline-success">Liste</a>
-        </form>
+        
     </div>
 </nav>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-5">
+    
     {{ form.media.css }}  {# CSS für JS-Widgets wie Select2 #}
-    <form method="post" id="auftrag-form">
-        {% csrf_token %}
+
 
         <div class="row gx-3 gy-3">
             <div class="col-md-4">

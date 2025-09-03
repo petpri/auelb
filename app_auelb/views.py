@@ -46,7 +46,7 @@ class KundenauftragUpdate(UpdateView):
     #success_url=reverse_lazy('auftrag_auftragsliste')
 
     def get_success_url(self):
-        return reverse_lazy('kundenauftrag_bearbeiten', kwargs={'pk': self.get_object().id})
+        return reverse_lazy('kundenauftrag_bearbeiten', kwargs={'pk': self.get_object().pk})
 
 
 #Kundenauftrag NEU

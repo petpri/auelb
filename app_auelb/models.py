@@ -29,7 +29,7 @@ class Kundenauftrag(models.Model):
     
     kundenauftrag = models.IntegerField(verbose_name="Kundenauftrag")
     kundenname = models.ForeignKey(Kunde, on_delete=models.CASCADE,related_name="kdname")
-    statuskundenauftrag = models.ForeignKey(StatusKundenauftrag, on_delete=models.CASCADE, default='---',related_name="rel_statkd")
+    statuskundenauftrag = models.ForeignKey(StatusKundenauftrag, on_delete=models.CASCADE, default='---',related_name="rel_statkd", null=True, blank=True)
          
 
     def __str__(self):
