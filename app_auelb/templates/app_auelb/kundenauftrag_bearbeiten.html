@@ -3,38 +3,47 @@
 {% load crispy_forms_tags %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load widget_tweaks %}
 
-{% block header %}
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-    <div class="container-fluid">
-        <!-- Aktionen -->
-        
-        <form method="post" class="d-flex" id="auftrag-form">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-success me-2">Speichern</button>
-            <a href="{% url 'auftrag_auftragsliste' %}" class="btn btn-outline-success">Liste</a>
-        
-    </div>
-</nav>
-{% endblock %}
+
+<header>
+    {% block header %}
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">  
+        <div class="col-auto mb-3 mx-1">
+            <form method="post">
+            {% csrf_token %}  
+                <input type="submit" class="btn btn-outline-success  btn-sm me-2" value="SPEICHERN">
+                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success btn-sm me-2">Liste</a>
+                
+        </div>
+    </nav>  
+
+    {% endblock %}
+</header>
+
 
 {% block content %}
 <div class="container mt-5 pt-5">
     
     {{ form.media.css }}  {# CSS für JS-Widgets wie Select2 #}
-
-
-        <div class="row gx-3 gy-3">
-            <div class="col-md-4">
-                {{ form.kundenauftrag|as_crispy_field }}
+        <div class="row">
+            <div class="col-3">
+                <label for="{{ form.kundenauftrag.id_for_label }}">Kundenauftrag</label>
+                {% render_field form.kundenauftrag class="form-control" %}
             </div>
-            <div class="col-md-4">
-                {{ form.kundenname|as_crispy_field }}
+            <div class="col-3">
+                <label for="{{ form.kundenname.id_for_label }}">Kundenname</label>
+                {% render_field form.kundenname class="form-control" %}
             </div>
-            <div class="col-md-4">
-                {{ form.statuskundenauftrag|as_crispy_field }}
+            <div class="col-3">
+                <label for="{{ form.v_endtermin.id_for_label }}">Endtermin</label>
+                {% render_field form.v_endtermin type="date" class="form-control" %}
             </div>
-        </div>
+            <div class="col-3">
+                <label for="{{ form.statuskundenauftrag.id_for_label }}">Status Kundenauftrag</label>
+                {% render_field form.statuskundenauftrag class="form-control" %}
+            </div>
+        </div> 
     </form>
 </div>
 

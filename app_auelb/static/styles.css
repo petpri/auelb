@@ -1,14 +1,26 @@
-
-.no-border {
-  border: none;
-  box-shadow: none;
+/* Body und Header Abstand für fixed Navbar */
+body {
+    margin: 0;
+    padding-top: 48px; /* Höhe der Navbar + kleiner Puffer */
 }
 
+header, main {
+    margin: 0;
+    padding: 0;
+}
+
+/* Kein Border für spezielle Elemente */
+.no-border {
+    border: none;
+    box-shadow: none;
+}
+
+/* Input Styling */
 input {
     border: none;
 }
 
-
+/* Select2 Anpassungen */
 .select2-selection__rendered {
     line-height: 35px !important;
 }
@@ -18,14 +30,41 @@ input {
 .select2-selection__arrow {
     height: 34px !important;
 }
+.select2-container {
+    width: 100% !important;
+}
 
-    .select2-container {
-        width: 100% !important;
-    }
+/* Tabelle kompakter */
+.table-sm td, 
+.table-sm th {
+    padding: 0.25rem 0.5rem;
+}
+.fs-7 {
+    font-size: 0.8rem; 
+}
 
-    table.table td, 
-    table.table th {
-        vertical-align: middle;
-        text-align: left;
-    }
+/* Overflow für Tabelle auf kleinen Bildschirmen */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
 
+.navbar .form-control,
+.navbar .form-select {
+    height: 32px;      /* kleiner als Standard 38px */
+    font-size: 0.85rem; /* etwas kleinere Schrift */
+    padding: 0.25rem 0.5rem; /* kompakter */
+}
+
+
+
+/* Navbar Buttons gleich hoch und gleich breit */
+.navbar .btn-navbar {
+    display: inline-flex;        /* Flex für vertikale + horizontale Zentrierung */
+    align-items: center;         /* vertikal zentrieren */
+    justify-content: center;     /* horizontal zentrieren */
+    min-width: 90px;             /* alle Buttons gleiche Mindestbreite */
+    height: 36px;                /* feste Höhe */
+    padding: 0 10px;             /* horizontaler Innenabstand */
+    font-size: 0.875rem;         /* entspricht btn-sm */
+}

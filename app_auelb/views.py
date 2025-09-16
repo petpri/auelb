@@ -1,10 +1,10 @@
 from django.views.generic import UpdateView, DeleteView
-from .models import Kundenauftrag, Produkt, Komponente, StatusKundenauftrag,StatusProdukt,Kunde,Material
+from .models import Kundenauftrag, Produkt, Komponente, StatusKundenauftrag,StatusProdukt,Kunde,Material,Merkmale
 from django.http import HttpResponse
 from django.template import loader
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import KundenauftragForm, Kd_formset, Prod_formset
+from .forms import KundenauftragForm, Kd_formset, Prod_formset,MerkmaleForm
 
 
 
@@ -48,6 +48,24 @@ class KundenauftragUpdate(UpdateView):
     def get_success_url(self):
         return reverse_lazy('kundenauftrag_bearbeiten', kwargs={'pk': self.get_object().pk})
 
+# Merkmale bearbeiten
+class MerkmaleUpdate(UpdateView):
+    model = Merkmale
+    form_class = MerkmaleForm
+    template_name = 'app_auelb/merkmale_bearbeiten.html'
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        # Versuch, das Objekt zu holen
+        obj = Merkmale.objects.filter(pk=pk).first()
+        if not obj:
+            # Objekt existiert nicht → erstelle ein neues
+            obj = Merkmale(pk=pk)
+            obj.save()
+        return obj
+
+    def get_success_url(self):
+        return reverse_lazy('merkmale_bearbeiten', kwargs={'pk': self.get_object().pk})
 
 #Kundenauftrag NEU
 def create_kundenauftrag(request):

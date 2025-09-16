@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Kundenauftrag, Produkt, Komponente, StatusKundenauftrag, StatusProdukt, StatusKomponente,Kunde,Material
+from .models import Kundenauftrag, Produkt, Komponente, StatusKundenauftrag, StatusProdukt, StatusKomponente,Kunde,Material,Merkmale
 from django_select2 import forms as s2forms
 from django_select2.forms import ModelSelect2Widget
 
@@ -37,7 +37,7 @@ class KundeWidget(ModelSelect2Widget):
 class KundenauftragForm(forms.ModelForm):
     class Meta:
         model = Kundenauftrag
-        fields = ['kundenauftrag','kundenname', 'statuskundenauftrag'] # 25.06.2025: status_kundenauftrag dazu gefügt
+        fields = ['kundenauftrag','kundenname', 'statuskundenauftrag','v_endtermin'] # 25.06.2025: status_kundenauftrag dazu gefügt
         widgets = {
             "kundenname": KundeWidget(attrs={"data-placeholder": "Kunden suchen", "style": "width: 300px;"}),
         }
@@ -59,7 +59,23 @@ class KomponenteForm(forms.ModelForm):
         model = Komponente
         fields=['id', 'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 'k_endtermin', 'statuskomponente']
 
+class MerkmaleForm(forms.ModelForm):
+    materialnummer = forms.ModelChoiceField(
+        queryset=Material.objects.all(),
+        widget=ModelSelect2Widget(
+            model=Material,
+            search_fields=['materialnummer__icontains', 'bezeichnung__icontains'],
+            attrs={
+                'data-placeholder': 'Material auswählen',
+                'style': 'width:100%;'
+            }
+        ),
+        label="Materialnummer"
+    )
 
+    class Meta:
+        model = Merkmale
+        fields = ['materialnummer', 'm_durchmesser', 'm_gewicht']
 
 class MaterialWidget(ModelSelect2Widget):
     model = Material

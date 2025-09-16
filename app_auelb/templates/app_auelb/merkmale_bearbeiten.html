@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load crispy_forms_tags %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load widget_tweaks %}
+
+<header>
+    {% block header %}
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">  
+        <div class="col-auto mb-3 mx-1">
+            <form method="post">
+            {% csrf_token %}  
+                <input type="submit" class="btn btn-outline-success btn-sm me-2" value="SPEICHERN">
+                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success btn-sm me-2">Liste</a>
+                
+        </div>
+    </nav>  
+
+    {% endblock %}
+</header>
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    
+    {{ form.media.css }}  {# CSS für JS-Widgets wie Select2 #}
+        <div class="row">
+            <div class="col-4">
+                <label for="{{ form.product.id_for_label }}">Materialnummer</label>
+                {% render_field form.materialnummer class="form-control" %}
+            </div>
+            <div class="col-4">
+                <label for="{{ form.m_durchmesser.id_for_label }}">Durchmesser</label>
+                {% render_field form.m_durchmesser  class="form-control" %}
+            </div>
+            <div class="col-4">
+                <label for="{{ form.m_gewicht.id_for_label }}">Gewicht</label>
+                {% render_field form.m_gewicht class="form-control" %}
+            </div>
+        </div> 
+    </form>
+</div>
+
+{{ form.media.js }}  
+{% endblock %}
+
+
+
+
+
+ 

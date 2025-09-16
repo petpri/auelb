@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load widget_tweaks %}
 
 
 
@@ -12,8 +13,8 @@
         {{ form.media.css }}   
         <form method="post">
             <div class="col-auto mb-3 mx-1">
-                <input type="submit" class="btn btn-outline-success " value="SPEICHERN">
-                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success ">Liste</a>
+                <input type="submit" class="btn btn-outline-success btn-sm me-2 " value="SPEICHERN">
+                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success btn-sm me-2 ">Liste</a>
             </div>
     </nav>  
     {% endblock %}
@@ -26,16 +27,23 @@
         <br> 
         {%csrf_token%}   
         <div class="row">
-            <div class="col-4">
-                {{ form.kundenauftrag|as_crispy_field }}
+            <div class="col-3">
+                <label for="{{ form.kundenauftrag.id_for_label }}">Kundenauftrag</label>
+                {% render_field form.kundenauftrag class="form-control" %}
             </div>
-            <div class="col-4">
-                {{ form.kundenname|as_crispy_field }}
+            <div class="col-3">
+                <label for="{{ form.kundenname.id_for_label }}">Kundenname</label>
+                {% render_field form.kundenname class="form-control" %}
             </div>
-            <div class="col-4">
-                {{ form.statuskundenauftrag|as_crispy_field }} <!--25.06.2025 dazu-->
+            <div class="col-3">
+                <label for="{{ form.v_endtermin.id_for_label }}">Endtermin</label>
+                {% render_field form.v_endtermin type="date" class="form-control" %}
             </div>
-        </div>   
+            <div class="col-3">
+                <label for="{{ form.statuskundenauftrag.id_for_label }}">Status Kundenauftrag</label>
+                {% render_field form.statuskundenauftrag class="form-control" %}
+            </div>
+        </div>  
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {{ form.media.js }}

@@ -4,13 +4,16 @@ from datetime import date
 
 # STATUS: Auswahlfelder - Kundenauftrag
 class StatusKundenauftrag(models.Model):
-    kd_auswahl = models.CharField(max_length=20, default="---")
+    kd_auswahl = models.CharField(max_length=20,default="---")
 
     def __str__(self):
         return self.kd_auswahl
     
     class Meta:
         db_table='tbl_statuskundenauftrage'
+        verbose_name = "Status Kundenauftrag"
+        verbose_name_plural = "Status Kundenaufträge"
+
 
 # Kunde:
 class Kunde(models.Model):
@@ -22,14 +25,17 @@ class Kunde(models.Model):
     
     class Meta:
         db_table='tbl_kunde'
+        verbose_name = "Kunde"
+        verbose_name_plural = "Kunden"
 
 
 # KUNDENAUFTRAG
 class Kundenauftrag(models.Model):
     
-    kundenauftrag = models.IntegerField(verbose_name="Kundenauftrag")
+    kundenauftrag = models.IntegerField(verbose_name="Kundenauftrag",default='---')
     kundenname = models.ForeignKey(Kunde, on_delete=models.CASCADE,related_name="kdname")
-    statuskundenauftrag = models.ForeignKey(StatusKundenauftrag, on_delete=models.CASCADE, default='---',related_name="rel_statkd", null=True, blank=True)
+    v_endtermin=models.DateField(default=date.today)
+    statuskundenauftrag = models.ForeignKey(StatusKundenauftrag, on_delete=models.CASCADE,related_name="rel_statkd", null=True, blank=True,default="---")
          
 
     def __str__(self):
@@ -37,6 +43,8 @@ class Kundenauftrag(models.Model):
       
     class Meta:
         db_table='tbl_kundenauftrage'  # db_table: Tabelle in Datenbank wird mit tbl_marke benannt - wegen Kleinschreibung in xampp
+        verbose_name = "Kundenauftrag"
+        verbose_name_plural = "Kundenaufträge"
 
 # Material:
 class Material(models.Model):
@@ -49,6 +57,23 @@ class Material(models.Model):
     
     class Meta:
         db_table='tbl_material'
+        verbose_name = "Material"
+        verbose_name_plural = "Materialien"
+
+#Merkmale
+class Merkmale(models.Model):
+    materialnummer = models.OneToOneField(Material, on_delete=models.CASCADE,related_name="merkmale",null=True,blank=True)
+    m_durchmesser=models.DecimalField(max_digits=6,decimal_places=3,null=True,blank=True)
+    m_gewicht=models.DecimalField(max_digits=6,decimal_places=3,null=True,blank=True)
+   
+    def __str__(self):
+        return str(self.materialnummer) 
+    class Meta:
+        db_table='tbl_merkmale'
+        verbose_name = "Merkmal"
+        verbose_name_plural = "Merkmale"
+
+
 
 
 # Auswahlfelder - Produkt
@@ -60,6 +85,11 @@ class StatusProdukt(models.Model):
     
     class Meta:
         db_table='tbl_statusprodukt'
+        verbose_name = "Status Produkt"
+        verbose_name_plural = "Status Produkte"
+
+
+
 
 # PRODUKT
 class Produkt(models.Model):
@@ -69,7 +99,7 @@ class Produkt(models.Model):
     p_auftragsmenge=models.CharField(max_length=20,null=True,blank=True)
     p_fertigungsauftrag=models.CharField(max_length=10,null=True,blank=True)
     p_endtermin=models.DateField(default=date.today)
-    statusprodukt = models.ForeignKey(StatusProdukt, on_delete=models.CASCADE,default='---')
+    statusprodukt = models.ForeignKey(StatusProdukt, on_delete=models.CASCADE,default="---")
 
 
     def __str__(self):
@@ -79,6 +109,8 @@ class Produkt(models.Model):
        
     class Meta:
         db_table='tbl_produkt'
+        verbose_name = "Produkt"
+        verbose_name_plural = "Produkte"
 
 
 # Auswahlfelder - Komponente
@@ -90,6 +122,8 @@ class StatusKomponente(models.Model):
     
     class Meta:
         db_table='tbl_statuskomponente'
+        verbose_name = "Status Komponente"
+        verbose_name_plural = "Status Komponenten "
 
 # KOMPONENTE
 class Komponente(models.Model):
@@ -99,11 +133,13 @@ class Komponente(models.Model):
     k_auftragsmenge=models.CharField(max_length=20,null=True,blank=True)
     k_fertigungsauftrag=models.CharField(max_length=10,null=True,blank=True)
     k_endtermin=models.DateField(default=date.today)
-    statuskomponente = models.ForeignKey(StatusKomponente, on_delete=models.CASCADE,default='---')
+    statuskomponente = models.ForeignKey(StatusKomponente, on_delete=models.CASCADE,default="---")
    
     def __str__(self):
         return str(self.bezeichnung) 
     class Meta:
         db_table='tbl_komponente'
+        verbose_name = "Komponente"
+        verbose_name_plural = "Komponenten"
 
 # Create your models here.
