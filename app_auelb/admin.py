@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Produkt, Komponente, Kundenauftrag,StatusKomponente,StatusProdukt,StatusKundenauftrag,Kunde,Material,Merkmale
+from .models import Produkt, Komponente, Kundenauftrag,StatusKomponente,StatusProdukt,StatusKundenauftrag,Kunde,Material,Merkmale,Urblatt
 
 @admin.register(Kunde)
 class KundenauftragAdmin(admin.ModelAdmin):
@@ -27,6 +27,10 @@ class ProduktAdmin(admin.ModelAdmin):
 @admin.register(Merkmale)
 class MerkmaleAdmin(admin.ModelAdmin):
     list_display=['id','materialnummer', 'm_durchmesser', 'm_gewicht']
+
+@admin.register(Urblatt)
+class UrblattAdmin(admin.ModelAdmin):
+    list_display=['id','materialnummer', 'u_schnittwerkzeug']
 
 @admin.register(StatusKomponente)
 class StatusKomponenteAdmin(admin.ModelAdmin):

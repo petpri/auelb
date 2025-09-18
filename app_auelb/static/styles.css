@@ -38,9 +38,10 @@ input {
 .table-sm td, 
 .table-sm th {
     padding: 0.25rem 0.5rem;
+    font-size: 0.875rem; 
 }
 .fs-7 {
-    font-size: 0.8rem; 
+    font-size: 0.75rem; 
 }
 
 /* Overflow für Tabelle auf kleinen Bildschirmen */
@@ -52,7 +53,7 @@ input {
 .navbar .form-control,
 .navbar .form-select {
     height: 32px;      /* kleiner als Standard 38px */
-    font-size: 0.85rem; /* etwas kleinere Schrift */
+    font-size: 0.75rem; /* etwas kleinere Schrift */
     padding: 0.25rem 0.5rem; /* kompakter */
 }
 
@@ -67,4 +68,9 @@ input {
     height: 36px;                /* feste Höhe */
     padding: 0 10px;             /* horizontaler Innenabstand */
     font-size: 0.875rem;         /* entspricht btn-sm */
+}
+
+select.form-select {
+    font-size: 0,75rem; /* fs-7 */
+    color: #212529; /* text-dark */
 }

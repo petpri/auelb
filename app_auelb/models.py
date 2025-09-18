@@ -73,7 +73,18 @@ class Merkmale(models.Model):
         verbose_name = "Merkmal"
         verbose_name_plural = "Merkmale"
 
-
+#Urblatt
+class Urblatt(models.Model):
+    materialnummer = models.OneToOneField(Material, on_delete=models.CASCADE,related_name="urblatt",null=True,blank=True)
+    u_schnittwerkzeug=models.CharField(max_length=20, verbose_name="Schnittwerkzeug")
+    
+   
+    def __str__(self):
+        return str(self.materialnummer) 
+    class Meta:
+        db_table='tbl_urblatt'
+        verbose_name = "Urblatt"
+        verbose_name_plural = "Urblatt"
 
 
 # Auswahlfelder - Produkt

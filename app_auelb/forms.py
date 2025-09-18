@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from .models import Kundenauftrag, Produkt, Komponente, StatusKundenauftrag, StatusProdukt, StatusKomponente,Kunde,Material,Merkmale
+from .models import Kundenauftrag, Produkt, Komponente, StatusKundenauftrag, StatusProdukt, StatusKomponente,Kunde,Material,Merkmale,Urblatt
 from django_select2 import forms as s2forms
 from django_select2.forms import ModelSelect2Widget
 
@@ -76,6 +76,25 @@ class MerkmaleForm(forms.ModelForm):
     class Meta:
         model = Merkmale
         fields = ['materialnummer', 'm_durchmesser', 'm_gewicht']
+
+
+class UrblattForm(forms.ModelForm):
+    materialnummer = forms.ModelChoiceField(
+        queryset=Material.objects.all(),
+        widget=ModelSelect2Widget(
+            model=Material,
+            search_fields=['materialnummer__icontains', 'bezeichnung__icontains'],
+            attrs={
+                'data-placeholder': 'Material auswählen',
+                'style': 'width:100%;'
+            }
+        ),
+        label="Materialnummer"
+    )
+
+    class Meta:
+        model = Urblatt
+        fields = ['materialnummer', 'u_schnittwerkzeug']
 
 class MaterialWidget(ModelSelect2Widget):
     model = Material

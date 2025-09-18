@@ -1,10 +1,11 @@
 from django.urls import path,include
-from .views import auftragsliste_view, create_kundenauftrag, kundenauftragUpdate, produktUpdate, KundenauftragUpdate, kd_auftragsliste_view,MerkmaleUpdate
+from .views import auftragsliste_view, create_kundenauftrag, kundenauftragUpdate, produktUpdate, KundenauftragUpdate, kd_auftragsliste_view,MerkmaleUpdate,UrblattUpdate
 
 urlpatterns=[
     path('auftragsliste/', auftragsliste_view, name='auftrag_auftragsliste'),
     path('kundenauftrag_bearbeiten/<int:pk>/', KundenauftragUpdate.as_view(), name='kundenauftrag_bearbeiten'),
     path('merkmale_bearbeiten/<int:pk>/', MerkmaleUpdate.as_view(), name='merkmale_bearbeiten'),
+    path('urblatt_bearbeiten/<int:pk>/', UrblattUpdate.as_view(), name='urblatt_bearbeiten'),
     path('neu/', create_kundenauftrag, name='auftrag_neu'),
     path('auffrischen/<int:pk>/', kundenauftragUpdate, name='auftrag_auffrischen'),
     path('auffrischen_1/<int:pk>/', produktUpdate, name='auftrag_auffrischen_1'), 

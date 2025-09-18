@@ -9,7 +9,11 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top w-100">
     <div class="container-fluid px-2 d-flex align-items-center">
         <form method="get" class="d-flex w-100 align-items-center">
-            <input name="searchsuche" class="form-control me-2" type="search" placeholder="Kundenauftrag enthält" style="width: 180px;">
+            <input name="searchsuche" class="form-control me-2" type="search" placeholder="Kundenauf. enthält" style="width: 180px;">
+            <input name="materialsuche" class="form-control me-2" type="search" placeholder="Materialnr. enthält" style="width: 120px;">
+            <input name="kundennummer" class="form-control me-2" type="search" placeholder="Kundennr. enthält" style="width: 180px;">
+            <input name="fertigungsauftrag" class="form-control me-2" type="search" placeholder="Fertigungsauf. enthält" style="width: 170px;">
+            <!--<input name="status" class="form-control me-2" type="search" placeholder="Status enthält" style="width: 120px;">-->
             <select class="form-select me-2" name="my_select" style="width: 150px;">
                 {% for item in data %}
                     <option value="{{ item.id }}">{{ item.kd_auswahl }}</option>
@@ -17,7 +21,23 @@
             </select>
             <button type="submit" class="btn btn-outline-success btn-sm me-2">Search</button>
             <a href="{% url 'auftrag_neu' %}" class="btn btn-outline-success btn-sm me-2">NEU</a>
-            <a href="{% url 'auftrag_kd_auftragsliste' %}" class="btn btn-outline-success btn-sm">Kundenaufträge</a>
+            <a href="{% url 'auftrag_kd_auftragsliste' %}" class="btn btn-outline-success btn-sm me-2">Kundenaufträge</a>
+
+            {% if show_delivered == "1" %}
+                <!-- Nur Geliefert wird angezeigt → Button zurück -->
+                <a href="?{% for key, value in request.GET.items %}{% if key != 'show_delivered' %}{{ key }}={{ value }}&{% endif %}{% endfor %}" 
+                class="btn btn-outline-primary btn-sm me-2">
+                    Nicht Geliefert anzeigen
+                </a>
+            {% else %}
+                <!-- Standard: Geliefert ausblenden → Button zeigt nur Geliefert -->
+                <a href="?{% for key, value in request.GET.items %}{{ key }}={{ value }}&{% endfor %}show_delivered=1" 
+                class="btn btn-outline-primary btn-sm me-2">
+                    Nur Geliefert anzeigen
+                </a>
+            {% endif %}
+
+            
         </form>
     </div>
 </nav>
@@ -29,9 +49,10 @@
         <thead class="thead-dark sticky-top">
             <tr class="table-danger">
                 <th>A</th>
-                <th>U</th>
-                <th>O</th>
+                <th>P</th>
+                <th>K</th>
                 <th>M</th>
+                <th>U</th>
                 <th>KD-Auftrag</th>
                 <th>KD-Nummer</th>
                 <th>FERT/BANF</th>
@@ -47,7 +68,8 @@
             {% for z in ihre_daten.all %}
             <tr class="table-primary py-1">
                 <td><a href="{% url 'kundenauftrag_bearbeiten' z.pk %}">A</a></td>
-                <td><a href="{% url 'auftrag_auffrischen' z.pk %}">U</a></td>
+                <td><a href="{% url 'auftrag_auffrischen' z.pk %}">P</a></td>
+                <td></td>
                 <td></td>
                 <td>{{ z.id }}</td>
                 <td>{{ z.kundenauftrag|default:"" }}</td>
@@ -66,9 +88,15 @@
             <tr class="table-success">
                 <td></td>
                 <td></td>
-                <td><a href="{% url 'auftrag_auffrischen_1' y.pk %}">O</a></td>
+                
+                <td><a href="{% url 'auftrag_auffrischen_1' y.pk %}">K</a></td>
                 {% if y.bezeichnung.merkmale %}
                     <td><a href="{% url 'merkmale_bearbeiten' y.bezeichnung.merkmale.pk %}">M</a></td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                {% if y.bezeichnung.urblatt %}
+                    <td><a href="{% url 'urblatt_bearbeiten' y.bezeichnung.urblatt.pk %}">U</a></td>
                 {% else %}
                     <td></td>
                 {% endif %}
@@ -89,8 +117,14 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    
                     {% if x.bezeichnung.merkmale %}
                         <td><a href="{% url 'merkmale_bearbeiten' x.bezeichnung.merkmale.pk %}">M</a></td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if x.bezeichnung.urblatt %}
+                        <td><a href="{% url 'urblatt_bearbeiten' x.bezeichnung.urblatt.pk %}">U</a></td>
                     {% else %}
                         <td></td>
                     {% endif %}
