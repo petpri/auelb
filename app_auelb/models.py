@@ -77,7 +77,8 @@ class Merkmale(models.Model):
 class Urblatt(models.Model):
     materialnummer = models.OneToOneField(Material, on_delete=models.CASCADE,related_name="urblatt",null=True,blank=True)
     u_schnittwerkzeug=models.CharField(max_length=20, verbose_name="Schnittwerkzeug")
-    
+    u_bild = models.ImageField(upload_to="urblatt_bilder/", blank=True, null=True,verbose_name="Bild")
+
    
     def __str__(self):
         return str(self.materialnummer) 

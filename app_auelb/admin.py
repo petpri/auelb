@@ -30,7 +30,7 @@ class MerkmaleAdmin(admin.ModelAdmin):
 
 @admin.register(Urblatt)
 class UrblattAdmin(admin.ModelAdmin):
-    list_display=['id','materialnummer', 'u_schnittwerkzeug']
+    list_display=['id','materialnummer', 'u_schnittwerkzeug',"u_bild"]
 
 @admin.register(StatusKomponente)
 class StatusKomponenteAdmin(admin.ModelAdmin):

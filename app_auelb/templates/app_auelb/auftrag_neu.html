@@ -1,39 +1,42 @@
 {% extends "base.html" %}
+
 {% load django_bootstrap5 %}
 {% load crispy_forms_tags %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load widget_tweaks %}
 
-
-
-<header>
-    {% block header %}
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-        {{ form.media.css }}   
-        <form method="post">
-            <div class="col-auto mb-3 mx-1">
-                <input type="submit" class="btn btn-outline-success btn-sm me-2 " value="SPEICHERN">
-                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success btn-sm me-2 ">Liste</a>
-            </div>
-    </nav>  
-    {% endblock %}
-</header>
+{% block header %}
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2">
+            <!-- Speichern sendet das untere Formular -->
+            <button type="submit" form="kundenauftragForm" class="btn btn-outline-success btn-sm">
+                Speichern
+            </button>
+            <!-- Link zur Liste -->
+            <a href="{% url 'auftragsliste_nicht_geliefert' %}" class="btn btn-outline-success btn-sm">
+                Liste
+            </a>
+        </div>
+    </div>
+</nav>
+{% endblock %}
 
 {% block content %}
-        <br>
-        <br>
-        <br>
-        <br> 
-        {%csrf_token%}   
-        <div class="row">
+<div class="container mt-5 pt-5">
+    <form method="post" id="kundenauftragForm">
+        {% csrf_token %}
+        {{ form.media.css }}  {# CSS für Select2 #}
+
+        <div class="row g-3 mt-2">
             <div class="col-3">
                 <label for="{{ form.kundenauftrag.id_for_label }}">Kundenauftrag</label>
                 {% render_field form.kundenauftrag class="form-control" %}
             </div>
             <div class="col-3">
                 <label for="{{ form.kundenname.id_for_label }}">Kundenname</label>
-                {% render_field form.kundenname class="form-control" %}
+                {% render_field form.kundenname %} {# Select2 bleibt erhalten #}
             </div>
             <div class="col-3">
                 <label for="{{ form.v_endtermin.id_for_label }}">Endtermin</label>
@@ -43,10 +46,10 @@
                 <label for="{{ form.statuskundenauftrag.id_for_label }}">Status Kundenauftrag</label>
                 {% render_field form.statuskundenauftrag class="form-control" %}
             </div>
-        </div>  
+        </div>
     </form>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    {{ form.media.js }}
-   
-   
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}  {# JS für Select2 #}
 {% endblock %}

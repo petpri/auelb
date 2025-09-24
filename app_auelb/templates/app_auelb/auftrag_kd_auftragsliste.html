@@ -12,15 +12,24 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top w-100">
     <div class="container-fluid px-2 d-flex align-items-center">
         <form method="get" class="d-flex w-100 align-items-center">
-            <input name="searchsuche" class="form-control me-2" type="search" placeholder="Kundenauftrag enthält" style="width: 180px;">
+            <input name="searchsuche" class="form-control me-2" type="search" placeholder="Kundenauf. enthält" style="width: 180px;">
+            <input name="materialsuche" class="form-control me-2" type="search" placeholder="Materialnr. enthält" style="width: 120px;">
+            <input name="kundennummer" class="form-control me-2" type="search" placeholder="Kundennr. enthält" style="width: 180px;">
+            <input name="fertigungsauftrag" class="form-control me-2" type="search" placeholder="Fertigungsauf. enthält" style="width: 170px;">
+            <!--<input name="status" class="form-control me-2" type="search" placeholder="Status enthält" style="width: 120px;">-->
             <select class="form-select me-2" name="my_select" style="width: 150px;">
                 {% for item in data %}
                     <option value="{{ item.id }}">{{ item.kd_auswahl }}</option>
                 {% endfor %}
             </select>
             <button type="submit" class="btn btn-outline-success btn-sm me-2">Search</button>
-            <a href="{% url 'auftrag_neu' %}" class="btn btn-outline-success btn-sm me-2">NEU</a>
-            <a href="{% url 'auftrag_kd_auftragsliste' %}" class="btn btn-outline-success btn-sm">Kundenaufträge</a>
+            <a href="{% url 'create_kundenauftrag' %}" class="btn btn-outline-success btn-sm me-2">NEU</a>
+
+            <a href="{% url 'kd_auftragsliste' %}" class="btn btn-outline-success btn-sm me-2">Kundenaufträge</a>
+            <a href="{% url 'auftragsliste_geliefert' %}" class="btn btn-outline-success btn-sm me-2">geliefert</a>
+
+
+            
         </form>
     </div>
 </nav>
@@ -52,7 +61,7 @@
                     {% for z in ihre_daten.all %}
                     <tr class="table-primary py-1">
                         <td><a href="{% url 'kundenauftrag_bearbeiten' z.pk %}">A</a></td>
-                        <td><a href="{% url 'auftrag_auffrischen' z.pk %}">U</a></td>
+                        <td><a href="{% url 'kundenauftrag_update' z.pk %}">U</a></td>
                         <td></td>
                         <td>{{ z.id }}</td>
                         <td>{{ z.kundenauftrag }}</td>

@@ -5,47 +5,46 @@
 {% bootstrap_javascript %}
 {% load widget_tweaks %}
 
-<header>
-    {% block header %}
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">  
-        <div class="col-auto mb-3 mx-1">
-            <form method="post">
-            {% csrf_token %}  
-                <input type="submit" class="btn btn-outline-success btn-sm me-2" value="SPEICHERN">
-                <a href="{%url 'auftrag_auftragsliste'%}" class="btn btn-outline-success btn-sm me-2">Liste</a>
-                
+{% block header %}
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top w-100">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            {% if show_save_button %}
+                <button type="submit" form="main-form" class="btn btn-outline-success btn-sm me-2">Speichern</button>
+            {% endif %}
+            {% if back_url %}
+                <a href="{{ back_url }}" class="btn btn-outline-success btn-sm me-2">{{ back_label }}</a>
+            {% endif %}
         </div>
-    </nav>  
-
-    {% endblock %}
-</header>
+        <div class="text-danger ms-auto" style="font-weight: normal;">
+            {{ mode_label }}
+        </div>
+    </div>
+</nav>
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5 pt-5">
-    
-    {{ form.media.css }}  {# CSS für JS-Widgets wie Select2 #}
+    <form method="post" enctype="multipart/form-data" id="main-form">
+        {% csrf_token %}
+
         <div class="row">
             <div class="col-4">
-                <label for="{{ form.product.id_for_label }}">Materialnummer</label>
+                <label for="{{ form.materialnummer.id_for_label }}">Materialnummer</label>
                 {% render_field form.materialnummer class="form-control" %}
             </div>
             <div class="col-4">
                 <label for="{{ form.m_durchmesser.id_for_label }}">Durchmesser</label>
-                {% render_field form.m_durchmesser  class="form-control" %}
+                {% render_field form.m_durchmesser class="form-control" %}
             </div>
             <div class="col-4">
                 <label for="{{ form.m_gewicht.id_for_label }}">Gewicht</label>
                 {% render_field form.m_gewicht class="form-control" %}
             </div>
-        </div> 
+        </div>
     </form>
 </div>
 
-{{ form.media.js }}  
+{{ form.media.js }}
 {% endblock %}
-
-
-
-
-
- 
+^

@@ -1,15 +1,37 @@
-from django.urls import path,include
-from .views import auftragsliste_view, create_kundenauftrag, kundenauftragUpdate, produktUpdate, KundenauftragUpdate, kd_auftragsliste_view,MerkmaleUpdate,UrblattUpdate
+from django.urls import path
+from . import views
 
-urlpatterns=[
-    path('auftragsliste/', auftragsliste_view, name='auftrag_auftragsliste'),
-    path('kundenauftrag_bearbeiten/<int:pk>/', KundenauftragUpdate.as_view(), name='kundenauftrag_bearbeiten'),
-    path('merkmale_bearbeiten/<int:pk>/', MerkmaleUpdate.as_view(), name='merkmale_bearbeiten'),
-    path('urblatt_bearbeiten/<int:pk>/', UrblattUpdate.as_view(), name='urblatt_bearbeiten'),
-    path('neu/', create_kundenauftrag, name='auftrag_neu'),
-    path('auffrischen/<int:pk>/', kundenauftragUpdate, name='auftrag_auffrischen'),
-    path('auffrischen_1/<int:pk>/', produktUpdate, name='auftrag_auffrischen_1'), 
-    path('kd_auftragsliste/', kd_auftragsliste_view, name='auftrag_kd_auftragsliste'),
-    path("select2/", include("django_select2.urls")),
-    
+urlpatterns = [
+    # ------------------------
+    # Auftragslisten
+    # ------------------------
+    path('auftraege/nicht-geliefert/', views.auftragsliste_nicht_geliefert_view, name='auftragsliste_nicht_geliefert'),
+    path('auftraege/geliefert/', views.auftragsliste_geliefert_view, name='auftragsliste_geliefert'),
+
+    # ------------------------
+    # Kundenauftrag
+    # ------------------------
+    path('kundenauftrag/neu/', views.create_kundenauftrag, name='create_kundenauftrag'),
+    path('kundenauftrag/bearbeiten/<int:pk>/', views.KundenauftragUpdate.as_view(), name='kundenauftrag_bearbeiten'),
+    path('kundenauftrag/update/<int:pk>/', views.kundenauftragUpdate, name='kundenauftrag_update'),
+
+    # ------------------------
+    # Produkt
+    # ------------------------
+    path('produkt/update/<int:pk>/', views.produktUpdate, name='produkt_update'),
+
+    # ------------------------
+    # Merkmale
+    # ------------------------
+    path('merkmale/update/<int:pk>/', views.MerkmaleUpdate.as_view(), name='merkmale_bearbeiten'),
+
+    # ------------------------
+    # Urblatt
+    # ------------------------
+    path('urblatt/update/<int:pk>/', views.UrblattUpdate.as_view(), name='urblatt_bearbeiten'),
+
+    # ------------------------
+    # Kundenauftragsliste (optional)
+    # ------------------------
+    path('kd_auftragsliste/', views.kd_auftragsliste_view, name='kd_auftragsliste'),
 ]

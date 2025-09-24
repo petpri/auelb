@@ -94,7 +94,7 @@ class UrblattForm(forms.ModelForm):
 
     class Meta:
         model = Urblatt
-        fields = ['materialnummer', 'u_schnittwerkzeug']
+        fields = ['materialnummer', 'u_schnittwerkzeug',"u_bild"]
 
 class MaterialWidget(ModelSelect2Widget):
     model = Material
