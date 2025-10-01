@@ -26,11 +26,11 @@ class ProduktAdmin(admin.ModelAdmin):
 
 @admin.register(Merkmale)
 class MerkmaleAdmin(admin.ModelAdmin):
-    list_display=['id','materialnummer', 'm_durchmesser', 'm_gewicht']
+    list_display=['id','materialnummer', 'm_bild']
 
 @admin.register(Urblatt)
 class UrblattAdmin(admin.ModelAdmin):
-    list_display=['id','materialnummer', 'u_schnittwerkzeug',"u_bild"]
+    list_display=['id',"u_bild"]
 
 @admin.register(StatusKomponente)
 class StatusKomponenteAdmin(admin.ModelAdmin):

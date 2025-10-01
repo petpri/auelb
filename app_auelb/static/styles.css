@@ -1,5 +1,6 @@
 /* Body und Header Abstand für fixed Navbar */
 body {
+    background-color: white; 
     margin: 0;
     padding-top: 48px; /* Höhe der Navbar + kleiner Puffer */
 }
@@ -73,4 +74,10 @@ input {
 select.form-select {
     font-size: 0,75rem; /* fs-7 */
     color: #212529; /* text-dark */
+}
+
+textarea.form-control {
+    height: 38px;       /* Höhe wie normales Input */
+    resize: none;       /* kein Ziehen möglich */
+    overflow: hidden;   /* kein Scrollbar */
 }

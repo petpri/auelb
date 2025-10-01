@@ -1,50 +1,35 @@
 {% extends "base.html" %}
-{% load django_bootstrap5 %}
 {% load crispy_forms_tags %}
+{% load django_bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-{% load widget_tweaks %}
 
 {% block header %}
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top w-100">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-            {% if show_save_button %}
-                <button type="submit" form="main-form" class="btn btn-outline-success btn-sm me-2">Speichern</button>
-            {% endif %}
-            {% if back_url %}
-                <a href="{{ back_url }}" class="btn btn-outline-success btn-sm me-2">{{ back_label }}</a>
-            {% endif %}
-        </div>
-        <div class="text-danger ms-auto" style="font-weight: normal;">
-            {{ mode_label }}
-        </div>
-    </div>
+  <div class="container-fluid px-2 d-flex align-items-center">
+    <a href="{{ back_url }}" class="btn btn-outline-success btn-sm me-2">{{ back_label }}</a>
+    <span class="text-danger me-2">{{ mode_label }}</span>
+    {% if show_save_button %}
+      <button type="submit" form="merkmale-form" class="btn btn-success btn-sm me-2">Speichern</button>
+    {% endif %}
+  </div>
 </nav>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-5">
-    <form method="post" enctype="multipart/form-data" id="main-form">
-        {% csrf_token %}
-
-        <div class="row">
-            <div class="col-4">
-                <label for="{{ form.materialnummer.id_for_label }}">Materialnummer</label>
-                {% render_field form.materialnummer class="form-control" %}
-            </div>
-            <div class="col-4">
-                <label for="{{ form.m_durchmesser.id_for_label }}">Durchmesser</label>
-                {% render_field form.m_durchmesser class="form-control" %}
-            </div>
-            <div class="col-4">
-                <label for="{{ form.m_gewicht.id_for_label }}">Gewicht</label>
-                {% render_field form.m_gewicht class="form-control" %}
-            </div>
-        </div>
+<div class="container mt-5 pt-4">
+  {% if object.m_bild %}
+    <p><strong>Materialnummer:</strong> {{ object.materialnummer.materialnummer }} - {{ object.materialnummer.bezeichnung }}</p>
+    <div class="mt-2">
+      <img src="{{ object.m_bild.url }}" alt="Merkmale Bild" class="img-thumbnail">
+    </div>
+  {% else %}
+    <form id="merkmale-form" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form|crispy }}
     </form>
+  {% endif %}
 </div>
-
-{{ form.media.js }}
 {% endblock %}
-^
+
+

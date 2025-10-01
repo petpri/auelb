@@ -25,27 +25,46 @@
 
 {% block content %}
 <div class="container mt-5 pt-5">
-    <form method="post" id="kundenauftragForm">
+    <form method="post" id="kundenauftragForm" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.media.css }}  {# CSS für Select2 #}
 
         <div class="row g-3 mt-2">
-            <div class="col-3">
+            <div class="col-2">
                 <label for="{{ form.kundenauftrag.id_for_label }}">Kundenauftrag</label>
                 {% render_field form.kundenauftrag class="form-control" %}
             </div>
             <div class="col-3">
                 <label for="{{ form.kundenname.id_for_label }}">Kundenname</label>
-                {% render_field form.kundenname %} {# Select2 bleibt erhalten #}
+                {% render_field form.kundenname class="form-control" %} {# Select2 Dropdown #}
             </div>
-            <div class="col-3">
+            <div class="col-2">
                 <label for="{{ form.v_endtermin.id_for_label }}">Endtermin</label>
                 {% render_field form.v_endtermin type="date" class="form-control" %}
             </div>
-            <div class="col-3">
-                <label for="{{ form.statuskundenauftrag.id_for_label }}">Status Kundenauftrag</label>
-                {% render_field form.statuskundenauftrag class="form-control" %}
+            <div class="col-2">
+                <label for="{{ form.kun_infofeld.id_for_label }}">Infofeld</label>
+                {% render_field form.kun_infofeld class="form-control" %}
             </div>
+            <div class="col-2">
+                <label for="{{ form.statuskundenauftrag.id_for_label }}">Status Kundenauftrag</label>
+                <td>{% render_field form.statuskundenauftrag class="form-control" %}</td>
+            </div>
+
+            {# Bild unterhalb der Felder anzeigen #}
+            {% if object.foto %}
+            <div class="mt-3">
+                <p><strong>Kundenauftrag:</strong></p>
+                <img src="{{ object.foto.url }}" alt="Kundenauftrag Foto" class="img-fluid img-thumbnail">
+            </div>
+            {% endif %}
+
+            {# Optional: Bild hochladen #}
+            <div class="mt-3">
+                <label for="foto_upload">Foto hochladen</label>
+                <input type="file" name="foto" id="foto_upload" class="form-control">
+            </div>
+
         </div>
     </form>
 </div>
@@ -53,7 +72,3 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 {{ form.media.js }}  {# JS für Select2 #}
 {% endblock %}
-
-
-
- 

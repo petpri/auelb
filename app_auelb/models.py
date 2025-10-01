@@ -36,7 +36,8 @@ class Kundenauftrag(models.Model):
     kundenname = models.ForeignKey(Kunde, on_delete=models.CASCADE,related_name="kdname")
     v_endtermin=models.DateField(default=date.today)
     statuskundenauftrag = models.ForeignKey(StatusKundenauftrag, on_delete=models.CASCADE,related_name="rel_statkd", null=True, blank=True,default="---")
-         
+    foto = models.ImageField(upload_to='kundenauftraege/', blank=True, null=True,verbose_name="Bild") 
+    kun_infofeld = models.TextField("Infofeld", blank=True, null=True)    
 
     def __str__(self):
         return str(self.kundenauftrag)
@@ -50,6 +51,7 @@ class Kundenauftrag(models.Model):
 class Material(models.Model):
     materialnummer = models.IntegerField(verbose_name="Materialnummer")
     bezeichnung=models.CharField(max_length=39, verbose_name="Bezeichnung")
+    
 
     def __str__(self):
         return f"{self.bezeichnung} ({self.materialnummer})"
@@ -65,7 +67,9 @@ class Merkmale(models.Model):
     materialnummer = models.OneToOneField(Material, on_delete=models.CASCADE,related_name="merkmale",null=True,blank=True)
     m_durchmesser=models.DecimalField(max_digits=6,decimal_places=3,null=True,blank=True)
     m_gewicht=models.DecimalField(max_digits=6,decimal_places=3,null=True,blank=True)
+    m_bild = models.ImageField(upload_to="urblatt_bilder/", blank=True, null=True,verbose_name="Bild")
    
+
     def __str__(self):
         return str(self.materialnummer) 
     class Meta:
@@ -111,6 +115,7 @@ class Produkt(models.Model):
     p_auftragsmenge=models.CharField(max_length=20,null=True,blank=True)
     p_fertigungsauftrag=models.CharField(max_length=10,null=True,blank=True)
     p_endtermin=models.DateField(default=date.today)
+    p_infofeld = models.TextField("Infofeld", blank=True, null=True)
     statusprodukt = models.ForeignKey(StatusProdukt, on_delete=models.CASCADE,default="---")
 
 
@@ -145,6 +150,7 @@ class Komponente(models.Model):
     k_auftragsmenge=models.CharField(max_length=20,null=True,blank=True)
     k_fertigungsauftrag=models.CharField(max_length=10,null=True,blank=True)
     k_endtermin=models.DateField(default=date.today)
+    k_infofeld = models.TextField("Infofeld", blank=True, null=True)
     statuskomponente = models.ForeignKey(StatusKomponente, on_delete=models.CASCADE,default="---")
    
     def __str__(self):

@@ -31,75 +31,64 @@ class KundeWidget(ModelSelect2Widget):
 
     def get_selected_result_label(self, item):
         return f"{item.kundenname}"
-    
+
 
 
 class KundenauftragForm(forms.ModelForm):
     class Meta:
         model = Kundenauftrag
-        fields = ['kundenauftrag','kundenname', 'statuskundenauftrag','v_endtermin'] # 25.06.2025: status_kundenauftrag dazu gefügt
+        fields = ['kundenauftrag','kundenname', 'statuskundenauftrag','v_endtermin','kun_infofeld'] # 25.06.2025: status_kundenauftrag dazu gefügt
         widgets = {
             "kundenname": KundeWidget(attrs={"data-placeholder": "Kunden suchen", "style": "width: 300px;"}),
+            "kun_infofeld": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 1,  # <-- Höhe wie ein normales Input-Feld
+                "style": "resize:none;"  # optional: verhindert das manuelle Vergrößern
+            }),
         }
 
 #class KundeForm(forms.ModelForm):
 #    class Meta:
 #        model = Kunde
-#        fields = ['id','kundennummer', 'kundenname'] 
+#        fields = ['id','kundennummer', 'kundenname']
 
 
 class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
         fields = ['id','materialnummer', 'bezeichnung']
- 
-    
+
+
 class KomponenteForm(forms.ModelForm):
     class Meta:
         model = Komponente
-        fields=['id', 'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 'k_endtermin', 'statuskomponente']
+        fields=['id', 'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 'k_endtermin','k_infofeld', 'statuskomponente']
 
 class MerkmaleForm(forms.ModelForm):
-    materialnummer = forms.ModelChoiceField(
-        queryset=Material.objects.all(),
-        widget=ModelSelect2Widget(
-            model=Material,
-            search_fields=['materialnummer__icontains', 'bezeichnung__icontains'],
-            attrs={
-                'data-placeholder': 'Material auswählen',
-                'style': 'width:100%;'
-            }
-        ),
-        label="Materialnummer"
-    )
-
     class Meta:
         model = Merkmale
-        fields = ['materialnummer', 'm_durchmesser', 'm_gewicht']
-
+        fields = ['m_bild']  # nur das Bildfeld, Materialnummer wird nicht als Eingabefeld angezeigt
+        widgets = {
+            'm_bild': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            "k_infofeld": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 1,  # <-- Höhe wie ein normales Input-Feld
+                "style": "resize:none;"  # optional: verhindert das manuelle Vergrößern
+            }),
+        }
 
 class UrblattForm(forms.ModelForm):
-    materialnummer = forms.ModelChoiceField(
-        queryset=Material.objects.all(),
-        widget=ModelSelect2Widget(
-            model=Material,
-            search_fields=['materialnummer__icontains', 'bezeichnung__icontains'],
-            attrs={
-                'data-placeholder': 'Material auswählen',
-                'style': 'width:100%;'
-            }
-        ),
-        label="Materialnummer"
-    )
-
     class Meta:
         model = Urblatt
-        fields = ['materialnummer', 'u_schnittwerkzeug',"u_bild"]
+        fields = ['u_bild']  # nur das Bildfeld
+        widgets = {
+            'u_bild': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
 
 class MaterialWidget(ModelSelect2Widget):
     model = Material
     search_fields = ["bezeichnung__icontains", "materialnummer__icontains" ]
-    
+
 
     # Wird in der Dropdown-Suche angezeigt
     def get_result_label(self, item):
@@ -115,32 +104,37 @@ class MaterialWidget(ModelSelect2Widget):
 class ProduktForm(forms.ModelForm):
     class Meta:
         model = Produkt
-        fields = ['kundenauftrag','bezeichnung','p_auftragsmenge','p_fertigungsauftrag','p_endtermin', 'statusprodukt']
+        fields = ['kundenauftrag','bezeichnung','p_auftragsmenge','p_fertigungsauftrag','p_endtermin', 'statusprodukt','p_infofeld']
         widgets = {
             "bezeichnung": MaterialWidget(attrs={
                 "data-placeholder": "Material suchen",
                 "style": "width: 450px;"  # Breite des Feldes
             }),
             "materialnummer": forms.TextInput(attrs={"readonly": "readonly"}),
+            "p_infofeld": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 1,  # <-- Höhe wie ein normales Input-Feld
+                "style": "resize:none;"  # optional: verhindert das manuelle Vergrößern
+            }),
         }
 
 Kd_formset = inlineformset_factory(
-    Kundenauftrag, 
+    Kundenauftrag,
     Produkt,
-    form=ProduktForm, 
-    can_delete = False, 
-    extra=1,max_num=8, 
-    fields=['id','kundenauftrag','bezeichnung','p_auftragsmenge','p_fertigungsauftrag','p_endtermin', 'statusprodukt'],
+    form=ProduktForm,
+    can_delete = False,
+    extra=1,max_num=8,
+    fields=['id','kundenauftrag','bezeichnung','p_auftragsmenge','p_fertigungsauftrag','p_endtermin','p_infofeld', 'statusprodukt'],
 
 )
 Prod_formset = inlineformset_factory(
     Produkt,
     Komponente,
-    form=ProduktForm, 
+    form=ProduktForm,
     can_delete=False,
     extra=1,
     max_num=8,
-    fields=['id','product','bezeichnung','k_auftragsmenge','k_fertigungsauftrag','k_endtermin', 'statuskomponente'],
+    fields=['id','product','bezeichnung','k_auftragsmenge','k_fertigungsauftrag','k_endtermin','k_infofeld', 'statuskomponente'],
 
 )
 

@@ -23,12 +23,12 @@ urlpatterns = [
     # ------------------------
     # Merkmale
     # ------------------------
-    path('merkmale/update/<int:pk>/', views.MerkmaleUpdate.as_view(), name='merkmale_bearbeiten'),
+    path('merkmale/update/<int:pk>/', views.merkmale_bearbeiten, name='merkmale_bearbeiten'),
 
     # ------------------------
     # Urblatt
     # ------------------------
-    path('urblatt/update/<int:pk>/', views.UrblattUpdate.as_view(), name='urblatt_bearbeiten'),
+    path('urblatt/update/<int:pk>/', views.urblatt_bearbeiten, name='urblatt_bearbeiten'),
 
     # ------------------------
     # Kundenauftragsliste (optional)
