@@ -4,7 +4,7 @@ from datetime import date
 
 # STATUS: Auswahlfelder - Kundenauftrag
 class StatusKundenauftrag(models.Model):
-    kd_auswahl = models.CharField(max_length=20,default="---")
+    kd_auswahl = models.CharField(max_length=20)
 
     def __str__(self):
         return self.kd_auswahl
@@ -67,7 +67,7 @@ class Merkmale(models.Model):
     materialnummer = models.OneToOneField(Material, on_delete=models.CASCADE,related_name="merkmale",null=True,blank=True)
     m_durchmesser=models.DecimalField(max_digits=6,decimal_places=3,null=True,blank=True)
     m_gewicht=models.DecimalField(max_digits=6,decimal_places=3,null=True,blank=True)
-    m_bild = models.ImageField(upload_to="urblatt_bilder/", blank=True, null=True,verbose_name="Bild")
+    m_bild = models.ImageField(upload_to="merkmale_bilder/", blank=True, null=True,verbose_name="Bild")
    
 
     def __str__(self):
@@ -115,8 +115,11 @@ class Produkt(models.Model):
     p_auftragsmenge=models.CharField(max_length=20,null=True,blank=True)
     p_fertigungsauftrag=models.CharField(max_length=10,null=True,blank=True)
     p_endtermin=models.DateField(default=date.today)
+    p_endtermin_wunsch=models.DateField(default=date.today)
+    p_serviceanfrage=models.CharField(max_length=20,null=True,blank=True)
+    p_kalkpreis=models.CharField(max_length=20,null=True,blank=True)
     p_infofeld = models.TextField("Infofeld", blank=True, null=True)
-    statusprodukt = models.ForeignKey(StatusProdukt, on_delete=models.CASCADE,default="---")
+    statusprodukt = models.ForeignKey(StatusProdukt, on_delete=models.CASCADE)
 
 
     def __str__(self):
@@ -151,7 +154,7 @@ class Komponente(models.Model):
     k_fertigungsauftrag=models.CharField(max_length=10,null=True,blank=True)
     k_endtermin=models.DateField(default=date.today)
     k_infofeld = models.TextField("Infofeld", blank=True, null=True)
-    statuskomponente = models.ForeignKey(StatusKomponente, on_delete=models.CASCADE,default="---")
+    statuskomponente = models.ForeignKey(StatusKomponente, on_delete=models.CASCADE)
    
     def __str__(self):
         return str(self.bezeichnung) 

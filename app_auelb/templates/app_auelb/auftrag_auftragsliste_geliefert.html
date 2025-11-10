@@ -28,6 +28,17 @@
             <a href="{% url 'auftragsliste_nicht_geliefert' %}?{{ request.GET.urlencode }}" class="btn btn-outline-success btn-sm me-2">PRODUKTIV</a>
             <a href="{% url 'create_kundenauftrag' %}" class="btn btn-outline-success btn-sm me-2">NEU</a>
         </form>
+
+        <!-- Anzeige angemeldeter Benutzer -->
+        <div class="d-flex align-items-center text-light">
+            {% if user.is_authenticated %}
+                <span class="me-3">Angemeldet als: <strong>{{ user.username }}</strong></span>
+                <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Abmelden</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Anmelden</a>
+            {% endif %}
+        </div>
+        
         <div class="text-danger" style="font-weight: normal;">{{ mode_label }}</div>
     </div>
 </nav>

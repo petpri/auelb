@@ -1,0 +1,20 @@
+from django.core.management.base import BaseCommand
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
+from app_auelb.models import Kundenauftrag, Produkt
+
+class Command(BaseCommand):
+    help = "Initial Groups and Permissions"
+
+    def handle(self, *args, **kwargs):
+        tvk_group, created = Group.objects.get_or_create(name="TVK")
+        
+        ct_kd = ContentType.objects.get_for_model(Kundenauftrag)
+        kd_perms = Permission.objects.filter(content_type=ct_kd)
+        tvk_group.permissions.add(*kd_perms)
+
+        ct_prod = ContentType.objects.get_for_model(Produkt)
+        prod_perms = Permission.objects.filter(content_type=ct_prod)
+        tvk_group.permissions.add(*prod_perms)
+
+        self.stdout.write(self.style.SUCCESS("TVK group created with permissions"))

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Login</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="id_username">Benutzername</label>
+        <input type="text" name="username" id="id_username" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="id_password">Passwort</label>
+        <input type="password" name="password" id="id_password" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+{% if form.errors %}
+<div class="alert alert-danger mt-3">
+    Benutzername oder Passwort ist falsch.
+</div>
+{% endif %}
+{% endblock %}

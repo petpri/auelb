@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Willkommen, {{ request.user.username }}!</h1>
+    <p>Wählen Sie eine Aktion:</p>
+    <ul>
+        <li><a href="{% url 'auftragsliste_nicht_geliefert' %}">Offene Aufträge</a></li>
+        <li><a href="{% url 'auftragsliste_geliefert' %}">Gelieferte Aufträge</a></li>
+    </ul>
+    <a href="{% url 'logout' %}" class="btn btn-secondary mt-3">Abmelden</a>
+</div>
+{% endblock %}

@@ -58,8 +58,6 @@ input {
     padding: 0.25rem 0.5rem; /* kompakter */
 }
 
-
-
 /* Navbar Buttons gleich hoch und gleich breit */
 .navbar .btn-navbar {
     display: inline-flex;        /* Flex für vertikale + horizontale Zentrierung */
@@ -80,4 +78,18 @@ textarea.form-control {
     height: 38px;       /* Höhe wie normales Input */
     resize: none;       /* kein Ziehen möglich */
     overflow: hidden;   /* kein Scrollbar */
+}
+
+/* readonly Felder grau hinterlegt und unbearbeitbar */
+.readonly-field {
+    background-color: #e9ecef !important;
+    color: #6c757d !important; /* Text grau */
+    pointer-events: none; /* verhindert Interaktion */
+    cursor: not-allowed;  /* verändert Cursor, um Inaktivität zu zeigen */
+}
+
+/* Für Select2, falls es bei readonly auch betroffen ist */
+.select2-container--disabled .select2-selection {
+    background-color: #e9ecef !important;
+    color: #6c757d !important;
 }

@@ -22,7 +22,7 @@ class ProduktAdmin(admin.ModelAdmin):
 
 @admin.register(Produkt)
 class ProduktAdmin(admin.ModelAdmin):
-    list_display=['id', 'bezeichnung', 'p_auftragsmenge', 'p_fertigungsauftrag', 'p_endtermin']
+    list_display=['id','kundenauftrag','bezeichnung','p_auftragsmenge','p_fertigungsauftrag','p_endtermin','p_endtermin_wunsch','p_infofeld', 'statusprodukt','p_serviceanfrage','p_kalkpreis']
 
 @admin.register(Merkmale)
 class MerkmaleAdmin(admin.ModelAdmin):

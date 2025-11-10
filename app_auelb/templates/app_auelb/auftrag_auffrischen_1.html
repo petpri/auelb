@@ -1,23 +1,44 @@
 {% extends "base.html" %}
 {% load static %}
+{% load widget_tweaks %}
 {% load crispy_forms_tags %}
 {% load django_bootstrap5 %}
+
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-{% load widget_tweaks %}
 
 {% block header %}
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top w-100">
-    <div class="container-fluid px-2 d-flex align-items-center">
-        <a href="{{ back_url }}?{{ query_string }}" class="btn btn-outline-success btn-sm me-2">{{ back_label }}</a>
-        <span class="text-danger me-2">{{ mode_label }}</span>
-        <button type="submit" form="formsetForm" class="btn btn-success btn-sm me-2">Speichern</button>
+    <div class="container-fluid px-2 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <a href="{{ back_url }}?{{ query_string }}" class="btn btn-outline-success btn-sm me-2">
+                {{ back_label }}
+            </a>
+            {% if can_edit %}
+                <button type="submit" form="formsetForm" class="btn btn-success btn-sm">
+                    Speichern
+                </button>
+            {% endif %}
+        </div>
+
+        <div class="text-center flex-grow-1">
+            <span class="navbar-text text-danger fw-bold fs-5">
+                {{ mode_label }}
+            </span>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <span class="navbar-text text-light me-2">
+                👤 {{ user_name }}
+            </span>
+            <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Logout</a>
+        </div>
     </div>
 </nav>
 {% endblock %}
 
 {% block content %}
-<div class="table-responsive px-2 mt-2">
+<div class="table-responsive px-2 mt-4">
     <form method="post" id="formsetForm">
         {% csrf_token %}
         {{ formset.management_form }}
@@ -25,7 +46,7 @@
         <table class="table table-bordered table-sm align-middle text-nowrap fs-7 m-0 w-100">
             <thead class="thead-dark sticky-top">
                 <tr class="table-danger">
-                    <th></th>
+                    <th>ID</th>
                     <th>Bezeichnung</th>
                     <th>Auftragsmenge</th>
                     <th>FERT/BANF</th>
@@ -37,13 +58,69 @@
             <tbody>
                 {% for r in formset %}
                 <tr class="table-warning">
-                    <td>{{ r.id }}</td>
-                    <td>{{ r.bezeichnung }}</td>
-                    <td>{{ r.k_auftragsmenge }} </td>
-                    <td>{{ r.k_fertigungsauftrag }}</td>
-                    <td>{% render_field r.k_endtermin type="date" class="form-control form-control-sm" %}</td>
-                    <td>{% render_field r.k_infofeld class="form-control form-control-sm" %}</td>
-                    <td>{% render_field r.statuskomponente class="form-select form-select-sm" %}</td>
+                    <td>{{ r.instance.id }}</td>
+
+                    {# Bezeichnung #}
+                    <td>
+                        {% if 'bezeichnung' in readonly_fields %}
+                            {% render_field r.bezeichnung class="form-control form-control-sm readonly-field" readonly="readonly" %}
+                        {% else %}
+                            {% render_field r.bezeichnung class="form-control form-control-sm" %}
+                        {% endif %}
+                    </td>
+
+                    {# Auftragsmenge #}
+                    <td>
+                        {% if "k_auftragsmenge" in readonly_fields %}
+                            <input type="text" class="form-control form-control-sm readonly-field"
+                                   value="{{ r.k_auftragsmenge.value|default_if_none:'' }}" readonly>
+                            <input type="hidden" name="{{ r.prefix }}-k_auftragsmenge" value="{{ r.k_auftragsmenge.value|default_if_none:'' }}">
+                        {% else %}
+                            {% render_field r.k_auftragsmenge class="form-control form-control-sm" %}
+                        {% endif %}
+                    </td>
+
+                    {# Fertigungsauftrag #}
+                    <td>
+                        {% if "k_fertigungsauftrag" in readonly_fields %}
+                            <input type="text" class="form-control form-control-sm readonly-field"
+                                   value="{{ r.k_fertigungsauftrag.value|default_if_none:'' }}" readonly>
+                            <input type="hidden" name="{{ r.prefix }}-k_fertigungsauftrag" value="{{ r.k_fertigungsauftrag.value|default_if_none:'' }}">
+                        {% else %}
+                            {% render_field r.k_fertigungsauftrag class="form-control form-control-sm" %}
+                        {% endif %}
+                    </td>
+
+                    {# Endtermin #}
+                    <td>
+                        {% if "k_endtermin" in readonly_fields %}
+                            <input type="text" class="form-control form-control-sm readonly-field"
+                                   value="{{ r.k_endtermin.value|default_if_none:'' }}" readonly>
+                            <input type="hidden" name="{{ r.prefix }}-k_endtermin" value="{{ r.k_endtermin.value|default_if_none:'' }}">
+                        {% else %}
+                            {% render_field r.k_endtermin type="date" class="form-control form-control-sm" %}
+                        {% endif %}
+                    </td>
+
+                    {# Infofeld #}
+                    <td>
+                        {% if "k_infofeld" in readonly_fields %}
+                            <textarea class="form-control form-control-sm readonly-field" rows="1" readonly>{{ r.k_infofeld.value|default_if_none:'' }}</textarea>
+                            <input type="hidden" name="{{ r.prefix }}-k_infofeld" value="{{ r.k_infofeld.value|default_if_none:'' }}">
+                        {% else %}
+                            {% render_field r.k_infofeld class="form-control form-control-sm" %}
+                        {% endif %}
+                    </td>
+
+                    {# Status #}
+                    <td>
+                        {% if "statuskomponente" in readonly_fields %}
+                            {% render_field r.statuskomponente class="form-select form-select-sm" disabled="disabled" %}
+                            <input type="hidden" name="{{ r.prefix }}-statuskomponente" value="{{ r.statuskomponente.value|default_if_none:'' }}">
+                        {% else %}
+                            {% render_field r.statuskomponente class="form-select form-select-sm" %}
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

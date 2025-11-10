@@ -7,13 +7,15 @@
 
 {% block header %}
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top w-100">
-    <div class="container-fluid px-2 d-flex align-items-center">
-        <form method="get" class="d-flex w-100 align-items-center">
+    <div class="container-fluid px-2 d-flex align-items-center justify-content-between">
+        
+        <!-- Suchformular -->
+        <form method="get" class="d-flex w-75 align-items-center">
             <input name="searchsuche" class="form-control me-2" type="search" placeholder="Kundenauf. enthält" value="{{ request.GET.searchsuche }}">
             <input name="materialsuche" class="form-control me-2" type="search" placeholder="Materialnr. enthält" value="{{ request.GET.materialsuche }}">
             <input name="kundennummer" class="form-control me-2" type="search" placeholder="Kundennr. enthält" value="{{ request.GET.kundennummer }}">
             <input name="fertigungsauftrag" class="form-control me-2" type="search" placeholder="Fertigungsauf. enthält" value="{{ request.GET.fertigungsauftrag }}">
-            <select name="my_select" class="form-select">
+            <select name="my_select" class="form-select me-2">
                 <option value="1">-- Alle --</option>
                 {% for status in data %}
                     <option value="{{ status.id }}" {% if request.GET.my_select == status.id|stringformat:"s" %}selected{% endif %}>
@@ -23,12 +25,23 @@
             </select>
             <button type="submit" class="btn btn-outline-success btn-sm me-2">Search</button>
 
-            {# Archiv/Produktiv Button #}
+            <!-- Archiv/Produktiv Button -->
             <a href="{% url 'auftragsliste_geliefert' %}?{{ request.GET.urlencode }}" class="btn btn-outline-success btn-sm me-2">ARCHIV</a>
             <a href="{% url 'create_kundenauftrag' %}" class="btn btn-outline-success btn-sm me-2">NEU</a>
         </form>
-        <div class="text-danger" style="font-weight: normal;">{{ mode_label }}</div>
+
+        <!-- Anzeige angemeldeter Benutzer -->
+        <div class="d-flex align-items-center text-light">
+            {% if user.is_authenticated %}
+                <span class="me-3">Angemeldet als: <strong>{{ user.username }}</strong></span>
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Abmelden</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Anmelden</a>
+            {% endif %}
+        </div>
     </div>
+
+    <div class="text-danger px-2" style="font-weight: normal;">{{ mode_label }}</div>
 </nav>
 {% endblock %}
 

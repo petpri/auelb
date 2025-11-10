@@ -18,11 +18,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.shortcuts import redirect
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('app_auelb/', include('app_auelb.urls')),
     path("select2/", include("django_select2.urls")),
+    path('accounts/', include('django.contrib.auth.urls')),
+
+    # Root-Pfad auf Login oder Home weiterleiten
+    path('', lambda request: redirect('login')),
 ]
 
 

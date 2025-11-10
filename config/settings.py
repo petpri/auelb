@@ -142,3 +142,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #für fotos
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+
+LOGIN_URL = '/login/'
+# Nach erfolgreichem Login weiterleiten
+LOGIN_REDIRECT_URL = '/app_auelb/auftraege/nicht-geliefert/'  # deine Auftragsliste-Seite
+LOGOUT_REDIRECT_URL = '/login/'  # Nach Logout wieder zum Login
