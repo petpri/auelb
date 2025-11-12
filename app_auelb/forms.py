@@ -67,7 +67,7 @@ class KomponenteForm(forms.ModelForm):
         model = Komponente
         fields = [
             'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 
-            'k_endtermin', 'k_infofeld', 'statuskomponente'
+            'k_endtermin', 'k_infofeld', 'statuskomponente',"k_serviceanfrage"
         ]
         widgets = {
             "bezeichnung": MaterialWidget(attrs={
@@ -88,7 +88,7 @@ class KomponenteForm(forms.ModelForm):
 
         # Alle außer PPS_MAWI nur lesbar
         if user and not user.groups.filter(name="PPS_MAWI").exists():
-            readonly_fields = ['bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 'k_endtermin', 'k_infofeld', 'statuskomponente']
+            readonly_fields = ['bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 'k_endtermin', 'k_infofeld', 'statuskomponente',"k_serviceanfrage"]
             for field in readonly_fields:
                 self.fields[field].disabled = True
                 self.fields[field].required = False # <-- WICHTIG: Erforderlichkeit entfernen
@@ -202,6 +202,6 @@ Prod_formset = inlineformset_factory(
     max_num=8,
     fields=[
         'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag',
-        'k_endtermin', 'k_infofeld', 'statuskomponente'
+        'k_endtermin', 'k_infofeld', 'statuskomponente',"k_serviceanfrage"
     ],
 )

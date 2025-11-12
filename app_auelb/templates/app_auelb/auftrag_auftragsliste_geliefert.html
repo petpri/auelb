@@ -8,7 +8,7 @@
 {% block header %}
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top w-100">
     <div class="container-fluid px-2 d-flex align-items-center">
-        <form method="get" class="d-flex w-100 align-items-center">
+        <form method="get" class="d-flex w-75 align-items-center">
             <!-- Suchfelder -->
             <input name="searchsuche" class="form-control me-2" type="search" placeholder="Kundenauf. enthält" value="{{ request.GET.searchsuche }}">
             <input name="materialsuche" class="form-control me-2" type="search" placeholder="Materialnr. enthält" value="{{ request.GET.materialsuche }}">
@@ -61,6 +61,7 @@
                 <th>Bez./KD-Name</th>
                 <th>bestellt</th>
                 <th>Endtermin</th>
+                <th>SAF</th>
                 <th>STATUS</th>
                 <th>INFO</th>
             </tr>
@@ -72,7 +73,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{ z.id }}</td>
+                <td>{{ z.id }}{{z.instance.id}}</td>
                 <td>{{ z.kundenauftrag|default:"" }}</td>
                 <td>{{ z.kundenname.kundennummer|default:"" }}</td>
                 <td></td>
@@ -80,6 +81,7 @@
                 <td>{{ z.kundenname.kundenname|default:"" }}</td>
                 <td></td>
                 <td>{{ z.v_endtermin|date:"d.m.Y" }}</td>
+                <td></td>
                 <td>{{ z.statuskundenauftrag }}</td>
                 <td title="{{ z.kun_infofeld|default_if_none:'' }}">{{ z.kun_infofeld|default_if_none:''|truncatechars:20 }}</td>
             </tr>
@@ -89,14 +91,15 @@
                 <tr class="table-success">
                     <td></td><td></td>
                     <td></td>
-                    <td><a href="{% url 'merkmale_bearbeiten' y.bezeichnung.pk %}?from={{ current_view }}&{{ request.GET.urlencode }}">M</a></td>
-                    <td><a href="{% url 'urblatt_bearbeiten' y.bezeichnung.pk %}?from={{ current_view }}&{{ request.GET.urlencode }}">U</a></td>
+                    <td><a href="{% url 'merkmale_bearbeiten' y.bezeichnung.pk %}?from={{ current_view }}&{{ request.GET.urlencode }}">⚙️</a></td>
+                    <td><a href="{% url 'urblatt_bearbeiten' y.bezeichnung.pk %}?from={{ current_view }}&{{ request.GET.urlencode }}">🕖</a></td>
                     <td></td><td></td>
                     <td>{{ y.p_fertigungsauftrag|default:"" }}</td>
                     <td>{{ y.bezeichnung.materialnummer }}</td>
                     <td>{{ y.bezeichnung.bezeichnung }}</td>
-                    <td>{{ y.p_auftragsmenge }}</td>
+                    <td>{{ y.p_auftragsmenge|default:"" }}</td>
                     <td>{{ y.p_endtermin|date:"d.m.Y" }}</td>
+                    <td>{{ y.p_serviceanfrage|default:"" }}</td>
                     <td>{{ y.statusprodukt }}</td>
                     <td title="{{ y.p_infofeld|default_if_none:'' }}">{{ y.p_infofeld|default_if_none:''|truncatechars:20 }}</td>
                 </tr>
@@ -105,14 +108,15 @@
                     {% if x.bezeichnung and x.bezeichnung.materialnummer %}
                     <tr class="table-warning">
                         <td></td><td></td><td></td>
-                        <td><a href="{% url 'merkmale_bearbeiten' x.bezeichnung.pk %}?from={{ current_view }}&{{ request.GET.urlencode }}">M</a></td>
-                        <td><a href="{% url 'urblatt_bearbeiten' x.bezeichnung.pk %}?from={{ current_view }}&{{ request.GET.urlencode }}">U</a></td>
+                        <td><a href="{% url 'merkmale_bearbeiten' x.bezeichnung.pk %}?from={{ current_view }}&{{ request.GET.urlencode }}">⚙️</a></td>
+                        <td><a href="{% url 'urblatt_bearbeiten' x.bezeichnung.pk %}?from={{ current_view }}&{{ request.GET.urlencode }}">🕖</a></td>
                         <td></td><td></td>
                         <td>{{ x.k_fertigungsauftrag|default:"" }}</td>
                         <td>{{ x.bezeichnung.materialnummer }}</td>
                         <td>{{ x.bezeichnung.bezeichnung }}</td>
                         <td>{{ x.k_auftragsmenge }}</td>
                         <td>{{ x.k_endtermin|date:"d.m.Y" }}</td>
+                        <td>{{ x.k_serviceanfrage|default:"" }}</td>
                         <td>{{ x.statuskomponente }}</td>
                         <td title="{{x.k_infofeld|default_if_none:''}}">{{x.k_infofeld|default_if_none:''|truncatechars:20}}</td>
                     </tr>

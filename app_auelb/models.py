@@ -153,6 +153,7 @@ class Komponente(models.Model):
     k_auftragsmenge=models.CharField(max_length=20,null=True,blank=True)
     k_fertigungsauftrag=models.CharField(max_length=10,null=True,blank=True)
     k_endtermin=models.DateField(default=date.today)
+    k_serviceanfrage=models.CharField(max_length=20,null=True,blank=True)
     k_infofeld = models.TextField("Infofeld", blank=True, null=True)
     statuskomponente = models.ForeignKey(StatusKomponente, on_delete=models.CASCADE)
    

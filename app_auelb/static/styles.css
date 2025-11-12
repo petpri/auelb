@@ -1,95 +1,252 @@
-/* Body und Header Abstand für fixed Navbar */
-body {
-    background-color: white; 
+/* ===============================================
+   🌿 Elegantes UI für Produktionsansicht – Einfarbig
+   =============================================== */
+
+/* ---------- Grundlayout ---------- */
+html body {
+    background-color: #e0e4e9; /* helles, neutrales Grau */
+    color: #f1f1f1;
+    font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.45;
     margin: 0;
-    padding-top: 48px; /* Höhe der Navbar + kleiner Puffer */
+    padding-top: 56px; /* Platz für fixierte Navbar */
 }
 
-header, main {
-    margin: 0;
-    padding: 0;
+/* ---------- Navbar ---------- */
+.navbar {
+    background-color: #23272b; /* dunkles Anthrazit */
+    border-bottom: 1px solid #1d1f23;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.35);
 }
 
-/* Kein Border für spezielle Elemente */
-.no-border {
-    border: none;
-    box-shadow: none;
+/* ---------- Navbar Inputs & Selects ---------- */
+.navbar .form-control,
+.navbar .form-select {
+    border: 1px solid #444a52;
+    border-radius: 4px;
+    background-color: #3b4047;
+    color: #f1f1f1;
+    font-size: 0.85rem;
+    height: 32px;
+    transition: all 0.2s ease;
 }
 
-/* Input Styling */
-input {
-    border: none;
+.navbar .form-control::placeholder {
+    color: #bbb;
 }
 
-/* Select2 Anpassungen */
-.select2-selection__rendered {
-    line-height: 35px !important;
-}
-.select2-container .select2-selection--single {
-    height: 38px !important;
-}
-.select2-selection__arrow {
-    height: 34px !important;
-}
-.select2-container {
-    width: 100% !important;
+.navbar .form-control:focus,
+.navbar .form-select:focus {
+    border-color: #00a884;
+    box-shadow: 0 0 0 2px rgba(0,168,132,0.25);
+    background-color: #444a52;
+    color: #fff;
 }
 
-/* Tabelle kompakter */
-.table-sm td, 
-.table-sm th {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem; 
-}
-.fs-7 {
-    font-size: 0.75rem; 
+/* ---------- Navbar Buttons ---------- */
+.navbar .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 0.85rem;
+    line-height: 1;
+    text-align: center;
+    border-radius: 4px;
+    transition: all 0.15s ease-in-out;
 }
 
-/* Overflow für Tabelle auf kleinen Bildschirmen */
+.navbar .btn-outline-success {
+    color: #00a884;
+    border-color: #00a884;
+    background-color: transparent;
+}
+
+.navbar .btn-outline-success:hover {
+    background-color: #00a884;
+    color: #fff;
+}
+
+.navbar .btn-outline-light {
+    color: #e0e0e0;
+    border-color: #666;
+}
+
+.navbar .btn-outline-light:hover {
+    background-color: #f8f9fa;
+    color: #222;
+}
+
+/* ---------- Benutzeranzeige ---------- */
+.navbar .text-light strong {
+    color: #00a884;
+}
+
+/* ---------- Tabellen ---------- */
+.table {
+    background-color: #ffffff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.table th {
+    background-color: #f2f4f6;
+    color: #3c4044;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.table td {
+    font-size: 0.8rem;
+    vertical-align: middle;
+    color: #333;
+}
+
+/* Farbstufen für Hierarchien */
+.table-primary  { background-color: #f0f6ff !important; }
+.table-success  { background-color: #f3fbf7 !important; }
+.table-warning  { background-color: #fff9f2 !important; }
+
+.table-hover tbody tr:hover {
+    background-color: #eef7ff;
+}
+
+/* ---------- Responsivität ---------- */
 .table-responsive {
     width: 100%;
     overflow-x: auto;
+    border-radius: 6px;
+    margin-top: 0.5rem;
 }
 
-.navbar .form-control,
-.navbar .form-select {
-    height: 32px;      /* kleiner als Standard 38px */
-    font-size: 0.75rem; /* etwas kleinere Schrift */
-    padding: 0.25rem 0.5rem; /* kompakter */
+/* ---------- Inputfelder allgemein ---------- */
+input, select, textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.4rem;
 }
 
-/* Navbar Buttons gleich hoch und gleich breit */
-.navbar .btn-navbar {
-    display: inline-flex;        /* Flex für vertikale + horizontale Zentrierung */
-    align-items: center;         /* vertikal zentrieren */
-    justify-content: center;     /* horizontal zentrieren */
-    min-width: 90px;             /* alle Buttons gleiche Mindestbreite */
-    height: 36px;                /* feste Höhe */
-    padding: 0 10px;             /* horizontaler Innenabstand */
-    font-size: 0.875rem;         /* entspricht btn-sm */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #00a884;
+    box-shadow: 0 0 0 2px rgba(0,168,132,0.2);
 }
 
-select.form-select {
-    font-size: 0,75rem; /* fs-7 */
-    color: #212529; /* text-dark */
-}
-
-textarea.form-control {
-    height: 38px;       /* Höhe wie normales Input */
-    resize: none;       /* kein Ziehen möglich */
-    overflow: hidden;   /* kein Scrollbar */
-}
-
-/* readonly Felder grau hinterlegt und unbearbeitbar */
+/* ---------- Readonly Felder ---------- */
 .readonly-field {
     background-color: #e9ecef !important;
-    color: #6c757d !important; /* Text grau */
-    pointer-events: none; /* verhindert Interaktion */
-    cursor: not-allowed;  /* verändert Cursor, um Inaktivität zu zeigen */
+    color: #6c757d !important;
+    cursor: not-allowed;
 }
 
-/* Für Select2, falls es bei readonly auch betroffen ist */
-.select2-container--disabled .select2-selection {
-    background-color: #e9ecef !important;
-    color: #6c757d !important;
+/* ---------- Badges ---------- */
+.badge {
+    font-size: 0.7rem;
+    border-radius: 4px;
+    padding: 0.25em 0.5em;
+}
+
+.badge.bg-success {
+    background-color: #00a884 !important;
+}
+
+.badge.bg-warning {
+    background-color: #ffcc66 !important;
+    color: #333 !important;
+}
+
+.badge.bg-secondary {
+    background-color: #adb5bd !important;
+}
+
+/* ---------- Links ---------- */
+a {
+    color: #0078d7;
+    text-decoration: none;
+}
+a:hover {
+    color: #00a884;
+    text-decoration: underline;
+}
+
+/* ---------- Modusanzeige (oben rechts) ---------- */
+.text-danger {
+    color: #ff6666 !important;
+    font-weight: 500;
+}
+
+/* ---------- Responsive Optimierung ---------- */
+@media (max-width: 992px) {
+    .navbar form {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .navbar form input,
+    .navbar form select,
+    .navbar form button {
+        width: 100%;
+    }
+}
+/* Tabellen-Hintergrund */
+.table {
+    background-color: #ffffff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Header */
+.table th {
+    background-color: #f1f3f5;
+    color: #2c2f33;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+
+
+/* Hover-Effekt */
+.table-hover tbody tr:hover {
+    background-color: #d0ebff; /* pastellblau */
+}
+
+/* Textfarbe Status */
+.status-fertig {
+    background-color: #c8e6c9;
+    color: #256029;
+    font-weight: 500;
+}
+
+.status-offen {
+    background-color: #ffecb3;
+    color: #805700;
+    font-weight: 500;
+}
+
+/* Neue Farben für Tabellenhierarchie */
+/* Kundenauftrag */
+.table-ka td, .table-ka {
+    background-color: #b1d7f1 !important; /* hellblau */
+}
+
+/* Produkte */
+.table-prod td, .table-prod {
+    background-color: #e8f5e9 !important; /* hellgrün */
+}
+
+/* Komponenten */
+.table-komp td, .table-komp {
+    background-color: #fff3e0 !important; /* hellorange */
+}
+
+/* Hover-Effekt */
+.table-hover tbody tr:hover td {
+    background-color: #d0ebff !important; /* pastellblau */
 }

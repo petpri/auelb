@@ -301,7 +301,7 @@ def produktUpdate(request, pk):
     # Readonly-Felder für TVK definieren
     readonly_fields = []
     restricted_fields = ['bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag',
-                         'k_endtermin', 'k_infofeld', 'statuskomponente']
+                         'k_endtermin', 'k_infofeld', 'statuskomponente','k_serviceanfrage']
 
     if "TVK" in user_groups:
         readonly_fields = restricted_fields

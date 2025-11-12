@@ -51,14 +51,15 @@
                     <th>Auftragsmenge</th>
                     <th>FERT/BANF</th>
                     <th>Endtermin</th>
+                    <th>SAF</th>
                     <th>Infofeld</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 {% for r in formset %}
-                <tr class="table-warning">
-                    <td>{{ r.instance.id }} - {{ r.id }}</td>
+                <tr class="table-komp">
+                    <td>{{ r.instance.id }}{{ r.id }}</td>
 
                     {# Bezeichnung #}
                     <td>
@@ -99,6 +100,17 @@
                             <input type="hidden" name="{{ r.prefix }}-k_endtermin" value="{{ r.k_endtermin.value|default_if_none:'' }}">
                         {% else %}
                             {% render_field r.k_endtermin type="date" class="form-control form-control-sm" %}
+                        {% endif %}
+                    </td>
+                    
+                    {# Serviceanfrage #}
+                    <td>
+                        {% if "k_serviceanfrage" in readonly_fields %}
+                            <input type="text" class="form-control form-control-sm readonly-field"
+                                   value="{{ r.k_serviceanfrage.value|default_if_none:'' }}" readonly>
+                            <input type="hidden" name="{{ r.prefix }}-r_serviceanfrage" value="{{ r.k_serviceanfrage.value|default_if_none:'' }}">
+                        {% else %}
+                            {% render_field r.k_serviceanfrage class="form-control form-control-sm" %}
                         {% endif %}
                     </td>
 
