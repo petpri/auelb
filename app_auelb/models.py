@@ -112,10 +112,12 @@ class Produkt(models.Model):
 
     kundenauftrag=models.ForeignKey(Kundenauftrag,on_delete=models.CASCADE,related_name="order_back_1")
     bezeichnung = models.ForeignKey(Material, on_delete=models.CASCADE,related_name="kdbezeichnung",null=True,blank=True)
+    p_frei=models.CharField(max_length=20,null=True,blank=True)
     p_auftragsmenge=models.CharField(max_length=20,null=True,blank=True)
     p_fertigungsauftrag=models.CharField(max_length=10,null=True,blank=True)
     p_endtermin=models.DateField(default=date.today)
     p_endtermin_wunsch=models.DateField(default=date.today)
+    p_LT_EXP=models.DateField(default=date.today)
     p_serviceanfrage=models.CharField(max_length=20,null=True,blank=True)
     p_kalkpreis=models.CharField(max_length=20,null=True,blank=True)
     p_infofeld = models.TextField("Infofeld", blank=True, null=True)
@@ -150,6 +152,7 @@ class Komponente(models.Model):
 
     product=models.ForeignKey(Produkt,on_delete=models.CASCADE,related_name="order_back_2")
     bezeichnung = models.ForeignKey(Material, on_delete=models.CASCADE,related_name="kdbezeichnung_komp",null=True,blank=True)
+    k_frei=models.CharField(max_length=20,null=True,blank=True)
     k_auftragsmenge=models.CharField(max_length=20,null=True,blank=True)
     k_fertigungsauftrag=models.CharField(max_length=10,null=True,blank=True)
     k_endtermin=models.DateField(default=date.today)

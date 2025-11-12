@@ -67,7 +67,7 @@ class KomponenteForm(forms.ModelForm):
         model = Komponente
         fields = [
             'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 
-            'k_endtermin', 'k_infofeld', 'statuskomponente',"k_serviceanfrage"
+            'k_endtermin', 'k_infofeld', 'statuskomponente',"k_serviceanfrage","k_frei"
         ]
         widgets = {
             "bezeichnung": MaterialWidget(attrs={
@@ -88,7 +88,7 @@ class KomponenteForm(forms.ModelForm):
 
         # Alle außer PPS_MAWI nur lesbar
         if user and not user.groups.filter(name="PPS_MAWI").exists():
-            readonly_fields = ['bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 'k_endtermin', 'k_infofeld', 'statuskomponente',"k_serviceanfrage"]
+            readonly_fields = ['bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 'k_endtermin', 'k_infofeld', 'statuskomponente',"k_serviceanfrage","k_frei"]
             for field in readonly_fields:
                 self.fields[field].disabled = True
                 self.fields[field].required = False # <-- WICHTIG: Erforderlichkeit entfernen
@@ -132,7 +132,7 @@ class ProduktForm(forms.ModelForm):
         fields = [
             'bezeichnung', 'p_auftragsmenge', 'p_fertigungsauftrag',
             'p_endtermin', 'p_endtermin_wunsch', 'p_serviceanfrage', 'p_kalkpreis',
-            'p_infofeld', 'statusprodukt'
+            'p_infofeld', 'statusprodukt',"p_frei","p_LT_EXP"
         ]
         widgets = {
             "bezeichnung": MaterialWidget(attrs={
@@ -147,11 +147,11 @@ class ProduktForm(forms.ModelForm):
         }
 
     GROUP_READONLY_FIELDS = {
-        'TVK': ['p_kalkpreis', 'p_serviceanfrage', 'p_endtermin', 'p_fertigungsauftrag'],
+        'TVK': ['p_kalkpreis', 'p_serviceanfrage', 'p_endtermin', 'p_fertigungsauftrag',"p_LT_EXP"],
         'Produktion': [
             'kundenauftrag', 'bezeichnung', 'p_auftragsmenge', 'p_fertigungsauftrag',
             'p_endtermin', 'p_endtermin_wunsch', 'p_serviceanfrage', 'p_kalkpreis',
-            'p_infofeld', 'statusprodukt'
+            'p_infofeld', 'statusprodukt',"p_frei","p_LT_EXP"
         ],
     }
 
@@ -189,7 +189,7 @@ Kd_formset = inlineformset_factory(
     fields=[ 
         'bezeichnung', 'p_auftragsmenge',
         'p_fertigungsauftrag', 'p_endtermin', 'p_infofeld', 'statusprodukt',
-        'p_endtermin_wunsch', 'p_kalkpreis', 'p_serviceanfrage'
+        'p_endtermin_wunsch', 'p_kalkpreis', 'p_serviceanfrage',"p_frei","p_LT_EXP"
     ],
 )
 
@@ -202,6 +202,6 @@ Prod_formset = inlineformset_factory(
     max_num=8,
     fields=[
         'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag',
-        'k_endtermin', 'k_infofeld', 'statuskomponente',"k_serviceanfrage"
+        'k_endtermin', 'k_infofeld', 'statuskomponente',"k_serviceanfrage","k_frei"
     ],
 )

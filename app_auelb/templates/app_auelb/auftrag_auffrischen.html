@@ -44,13 +44,15 @@
         {% csrf_token %}
         {{ formset.management_form }}
 
-        <table class="table table-bordered table-sm align-middle text-nowrap fs-7 m-0 w-100">
+        <table class="table table-bordered table-sm table-auffrischen align-middle text-nowrap fs-7 m-0 w-100">
             <thead class="thead-dark sticky-top">
                 <tr class="table-danger">
                     <th>ID</th>
                     <th>Bezeichnung</th>
+                    <th>FREI</th>
                     <th>Auftragsmenge</th>
                     <th>FERT/BANF</th>
+                    <th>Expedit</th>
                     <th>Endtermin</th>
                     <th>Wunsch LT</th>
                     <th>Serviceanfrage</th>
@@ -61,7 +63,7 @@
             </thead>
             <tbody>
                 {% for p in formset %}
-                <tr class="table-prod">
+                <tr class="table-prod table-auffrischen">
                     <td>{{ p.instance.id }}{{ p.id }}</td>
 
                     {# Bezeichnung #}
@@ -72,6 +74,17 @@
                             <input type="hidden" name="{{ p.prefix }}-bezeichnung" value="{{ p.bezeichnung.value|default_if_none:'' }}">
                         {% else %}
                             {% render_field p.bezeichnung class="form-control form-control-sm" %}
+                        {% endif %}
+                    </td>
+
+                    {# p_frei #}
+                    <td>
+                        {% if "p_frei" in readonly_fields %}
+                            <input type="text" class="form-control form-control-sm readonly-field"
+                                   value="{{ p.p_frei.value|default_if_none:'' }}" readonly>
+                            <input type="hidden" name="{{ p.prefix }}-p_frei" value="{{ p.p_frei.value|default_if_none:'' }} ">
+                        {% else %}
+                            {% render_field p.p_frei class="form-control form-control-sm" %}
                         {% endif %}
                     </td>
 
@@ -94,6 +107,17 @@
                             <input type="hidden" name="{{ p.prefix }}-p_fertigungsauftrag" value="{{ p.p_fertigungsauftrag.value|default_if_none:'' }}">
                         {% else %}
                             {% render_field p.p_fertigungsauftrag class="form-control form-control-sm" %}
+                        {% endif %}
+                    </td>
+                    
+                    {# Expedit #}
+                    <td>
+                        {% if "p_LT_EXP" in readonly_fields %}
+                            <input type="text" class="form-control form-control-sm readonly-field"
+                                   value="{{ p.p_LT_EXP.value|default_if_none:'' }}" readonly>
+                            <input type="hidden" name="{{ p.prefix }}-p_LT_EXP" value="{{ p.p_P_LT_EXP.value|default_if_none:'' }}">
+                        {% else %}
+                            {% render_field p.p_LT_EXP type="date" class="form-control form-control-sm" %}
                         {% endif %}
                     </td>
 

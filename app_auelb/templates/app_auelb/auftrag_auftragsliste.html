@@ -60,7 +60,9 @@
                 <th>FERT/BANF</th>
                 <th>Material</th>
                 <th>Bez./KD-Name</th>
+                <th>frei</th>
                 <th>bestellt</th>
+                <th>Expedit</th>
                 <th>Endtermin</th>
                 <th>SAF</th>
                 <th>STATUS</th>
@@ -81,6 +83,8 @@
                 <td></td>
                 <td>{{ z.kundenname.kundenname|default:"" }}</td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td>{{ z.v_endtermin|date:"d.m.Y" }}</td>
                 <td></td>
                 <td>{{ z.statuskundenauftrag }}</td>
@@ -98,7 +102,9 @@
                     <td>{{ y.p_fertigungsauftrag|default:"" }}</td>
                     <td>{{ y.bezeichnung.materialnummer }}</td>
                     <td>{{ y.bezeichnung.bezeichnung }}</td>
+                    <td>{{ y.p_frei|default:"" }}</td>
                     <td>{{ y.p_auftragsmenge|default:"" }}</td>
+                    <td>{{ y.p_LT_EXP|date:"d.m.Y" }}</td>
                     <td>{{ y.p_endtermin|date:"d.m.Y" }}</td>
                     <td>{{ y.p_serviceanfrage|default:"" }}</td>
                     <td>{{ y.statusprodukt }}</td>
@@ -115,7 +121,9 @@
                         <td>{{ x.k_fertigungsauftrag|default:"" }}</td>
                         <td>{{ x.bezeichnung.materialnummer }}</td>
                         <td>{{ x.bezeichnung.bezeichnung }}</td>
+                        <td>{{ x.k_frei|default:"" }}</td>
                         <td>{{ x.k_auftragsmenge|default:"" }}</td>
+                        <td></td>
                         <td>{{ x.k_endtermin|date:"d.m.Y" }}</td>
                         <td>{{ x.k_serviceanfrage|default:"" }}</td>
                         <td>{{ x.statuskomponente }}</td>

@@ -250,3 +250,148 @@ a:hover {
 .table-hover tbody tr:hover td {
     background-color: #d0ebff !important; /* pastellblau */
 }
+/* Angleichung der Höhe für Select2 an Bootstrap form-control */
+.select2-container .select2-selection--single {
+    height: auto !important; /* Wichtig, damit es flexibel bleibt */
+    padding: 0.3rem 0.4rem;  /* Gleiches Padding wie in Ihren anderen Input-Regeln */
+    line-height: 1.45;       /* Gleiche line-height wie im body definiert */
+    /* Stellen Sie sicher, dass die Höhe übereinstimmt. */
+}
+
+/* Zentrierung des Textes im Select2-Feld */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1.45; /* Muss der line-height des form-control entsprechen */
+    padding-left: 0;   /* Ggf. Padding anpassen falls notwendig */
+}
+
+/* Sicherstellen, dass das Dropdown-Pfeil-Feld auch die richtige Höhe hat */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+}
+
+/* Sicherstellen, dass die Status-Spalte (14. Spalte) genügend Breite hat */
+/* Optional: INFO-Spalte anpassen, falls sie zu schmal wird */
+.table th:nth-child(1),
+.table td:nth-child(1) {
+    min-width: 15px;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+    min-width: 15px;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+    min-width: 15px;
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+    min-width: 15px;
+
+}
+.table th:nth-child(5),
+.table td:nth-child(5) {
+    min-width: 15px;
+}
+
+.table th:nth-child(6),
+.table td:nth-child(6) {
+    min-width: 15px;
+}
+
+.table th:nth-child(7),
+.table td:nth-child(7) {
+    min-width: 15px;
+}
+
+.table th:nth-child(8),
+.table td:nth-child(8) {
+    min-width: 15px;
+}
+
+.table th:nth-child(9),
+.table td:nth-child(9) {
+    min-width: 15px;
+}
+.table th:nth-child(10),
+.table td:nth-child(10) {
+    min-width: 150px;
+}
+
+.table th:nth-child(11),
+.table td:nth-child(11) {
+    min-width: 30px;
+}
+
+.table th:nth-child(12),
+.table td:nth-child(12) {
+    min-width: 30px;
+}
+
+.table th:nth-child(13),
+.table td:nth-child(13) {
+    min-width: 50px;
+}
+
+.table th:nth-child(14),
+.table td:nth-child(14) {
+    min-width: 50px;
+    white-space: normal; /* Erlaubt, dass der Text bei Bedarf umbricht */
+}
+
+.table th:nth-child(15),
+.table td:nth-child(15) {
+    min-width: 50px; /* Passen Sie diesen Wert an, bis der längste Text passt */
+    white-space: normal; /* Erlaubt, dass der Text bei Bedarf umbricht */
+}
+
+.table th:nth-child(16),
+.table td:nth-child(16) {
+    min-width: 100px; /* Passen Sie diesen Wert an, bis der längste Text passt */
+    white-space: normal; /* Erlaubt, dass der Text bei Bedarf umbricht */
+}
+
+.table th:nth-child(17),
+.table td:nth-child(17) {
+    min-width: 150px; /* Passen Sie diesen Wert an, bis der längste Text passt */
+    white-space: normal; /* Erlaubt, dass der Text bei Bedarf umbricht */
+}
+
+/*Tabelle auffrischen */
+
+.table.table-auffrischen th:nth-child(1),
+.table.table-auffrischen td:nth-child(1) {
+    min-width: 15px;
+}
+
+.table.table-auffrischen th:nth-child(2),
+.table.table-auffrischen td:nth-child(2) {
+    min-width: 150px;
+}
+
+.table.table-auffrischen th:nth-child(3),
+.table.table-auffrischen td:nth-child(3) {
+    min-width: 100px;
+}
+
+.table.table-auffrischen th:nth-child(4),
+.table.table-auffrischen td:nth-child(4) {
+    min-width: 100px;
+}
+
+.table.table-auffrischen th:nth-child(5),
+.table.table-auffrischen td:nth-child(5) {
+    min-width: 100px;
+}
+
+.table.table-auffrischen th:nth-child(10),
+.table.table-auffrischen td:nth-child(10) {
+    min-width: 30px;
+}
+
+.table.table-auffrischen th:nth-child(11),
+.table.table-auffrischen td:nth-child(11) {
+    min-width: 120px;
+}
