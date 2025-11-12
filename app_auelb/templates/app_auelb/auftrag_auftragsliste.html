@@ -69,8 +69,8 @@
         <tbody>
             {% for z in ihre_daten.all %}
             <tr class="table-primary py-1">
-                <td><a href="{% url 'kundenauftrag_bearbeiten' z.pk %}?from={{ current_view }}&{{ request.GET.urlencode }}">A</a></td>
-                <td><a href="{% url 'kundenauftrag_update' z.pk %}?from={{ from_param }}&{{ request.GET.urlencode }}">P</a></td>
+                <td><a href="{% url 'kundenauftrag_bearbeiten' z.pk %}?from={{ current_view }}&{{ query_string }}">A</a></td>
+                <td><a href="{% url 'kundenauftrag_update' z.pk %}?from={{ from_param }}&{{ query_string }}">P</a></td>
                 <td></td>
                 <td></td>
                 <td>{{ z.id }}</td>

@@ -32,7 +32,7 @@ class Kunde(models.Model):
 # KUNDENAUFTRAG
 class Kundenauftrag(models.Model):
     
-    kundenauftrag = models.IntegerField(verbose_name="Kundenauftrag",default='---')
+    kundenauftrag = models.IntegerField(verbose_name="Kundenauftrag")
     kundenname = models.ForeignKey(Kunde, on_delete=models.CASCADE,related_name="kdname")
     v_endtermin=models.DateField(default=date.today)
     statuskundenauftrag = models.ForeignKey(StatusKundenauftrag, on_delete=models.CASCADE,related_name="rel_statkd", null=True, blank=True,default="---")

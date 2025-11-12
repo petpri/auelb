@@ -1,7 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
 from django_select2.forms import ModelSelect2Widget
-
 from .models import (
     Kundenauftrag, Produkt, Komponente, StatusKundenauftrag, 
     StatusProdukt, StatusKomponente, Kunde, Material, Merkmale, Urblatt
@@ -22,7 +21,6 @@ class KundeWidget(ModelSelect2Widget):
 
     def get_selected_result_label(self, item):
         return f"{item.kundenname}"
-
 
 class MaterialWidget(ModelSelect2Widget):
     model = Material
@@ -58,7 +56,7 @@ class KundenauftragForm(forms.ModelForm):
 class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
-        fields = ['id', 'materialnummer', 'bezeichnung']
+        fields = ['materialnummer', 'bezeichnung']
 
 
 # -------------------------
@@ -68,7 +66,7 @@ class KomponenteForm(forms.ModelForm):
     class Meta:
         model = Komponente
         fields = [
-            'id', 'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 
+            'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 
             'k_endtermin', 'k_infofeld', 'statuskomponente'
         ]
         widgets = {
@@ -86,17 +84,19 @@ class KomponenteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        self.empty_permitted = True # <-- Hinzugefügt: Leere Formulare zulassen
 
         # Alle außer PPS_MAWI nur lesbar
         if user and not user.groups.filter(name="PPS_MAWI").exists():
-            readonly_fields = ['bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag',
-                               'k_endtermin', 'k_infofeld', 'statuskomponente']
+            readonly_fields = ['bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag', 'k_endtermin', 'k_infofeld', 'statuskomponente']
             for field in readonly_fields:
                 self.fields[field].disabled = True
+                self.fields[field].required = False # <-- WICHTIG: Erforderlichkeit entfernen
                 # Grau hinterlegt
                 existing_class = self.fields[field].widget.attrs.get('class', '')
                 self.fields[field].widget.attrs['class'] = (existing_class + ' bg-light text-muted').strip()
                 self.fields[field].widget.attrs['style'] = self.fields[field].widget.attrs.get('style', '') + 'background-color:#e9ecef !important;color:#6c757d; !important'
+
 
 
 # -------------------------
@@ -108,11 +108,6 @@ class MerkmaleForm(forms.ModelForm):
         fields = ['m_bild']
         widgets = {
             'm_bild': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            "k_infofeld": forms.Textarea(attrs={
-                "class": "form-control",
-                "rows": 1,
-                "style": "resize:none;"
-            }),
         }
 
 
@@ -135,7 +130,7 @@ class ProduktForm(forms.ModelForm):
     class Meta:
         model = Produkt
         fields = [
-            'kundenauftrag', 'bezeichnung', 'p_auftragsmenge', 'p_fertigungsauftrag',
+            'bezeichnung', 'p_auftragsmenge', 'p_fertigungsauftrag',
             'p_endtermin', 'p_endtermin_wunsch', 'p_serviceanfrage', 'p_kalkpreis',
             'p_infofeld', 'statusprodukt'
         ]
@@ -151,7 +146,6 @@ class ProduktForm(forms.ModelForm):
             }),
         }
 
-    # Zentrale Verwaltung der readonly-Felder für Gruppen
     GROUP_READONLY_FIELDS = {
         'TVK': ['p_kalkpreis', 'p_serviceanfrage', 'p_endtermin', 'p_fertigungsauftrag'],
         'Produktion': [
@@ -164,22 +158,23 @@ class ProduktForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        self.empty_permitted = True # <-- Hinzugefügt: Leere Formulare zulassen
 
         if self.user:
             user_groups = self.user.groups.values_list('name', flat=True)
             for group_name in user_groups:
-                # Wenn der Benutzer zur "Produktion"-Gruppe gehört, werden die Felder readonly
                 readonly_fields = self.GROUP_READONLY_FIELDS.get(group_name, [])
                 for field_name in readonly_fields:
                     if field_name in self.fields:
                         field = self.fields[field_name]
                         field.disabled = True  # Setze das Feld auf disabled (readonly)
+                        field.required = False # <-- WICHTIG: Erforderlichkeit entfernen
                         
                         # optisches Styling: grau hinterlegt
-                        existing_class = field.widget.attrs.get('class', '')
+                        existing_class = field.widget.attrs.get('class', ' ')
                         field.widget.attrs['class'] = (existing_class + ' bg-light text-muted').strip()
-                        # optional: inline style, falls kein Bootstrap
                         field.widget.attrs['style'] = field.widget.attrs.get('style', '') + 'background-color:#e9ecef !important;color:#6c757d; !important'
+
 
 # -------------------------
 # Inline Formsets
@@ -192,10 +187,10 @@ Kd_formset = inlineformset_factory(
     extra=1,
     max_num=8,
     fields=[ 
-        'id', 'kundenauftrag', 'bezeichnung', 'p_auftragsmenge',
-        'p_fertigungsauftrag', 'p_endtermin', 'p_infofeld', 'statusprodukt','p_endtermin_wunsch','p_kalkpreis','p_serviceanfrage'
+        'bezeichnung', 'p_auftragsmenge',
+        'p_fertigungsauftrag', 'p_endtermin', 'p_infofeld', 'statusprodukt',
+        'p_endtermin_wunsch', 'p_kalkpreis', 'p_serviceanfrage'
     ],
-    
 )
 
 Prod_formset = inlineformset_factory(
@@ -206,28 +201,7 @@ Prod_formset = inlineformset_factory(
     extra=1,
     max_num=8,
     fields=[
-        'id', 'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag',
+        'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag',
         'k_endtermin', 'k_infofeld', 'statuskomponente'
     ],
 )
-
-
-# -------------------------
-# Auswahl Formulare
-# -------------------------
-class AuswahlForm_KD(forms.ModelForm):
-    class Meta:
-        model = StatusKundenauftrag
-        fields = ['kd_auswahl']
-
-
-class AuswahlForm_PROD(forms.ModelForm):
-    class Meta:
-        model = StatusProdukt
-        fields = ['produkt_auswahl']
-
-
-class AuswahlForm_KOMP(forms.ModelForm):
-    class Meta:
-        model = StatusKomponente
-        fields = ['komponente_auswahl']

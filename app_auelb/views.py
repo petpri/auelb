@@ -7,10 +7,9 @@ from .models import (
     Kundenauftrag, Produkt, Komponente, StatusKundenauftrag,
     StatusProdukt, Kunde, Material, Merkmale, Urblatt, StatusKomponente
 )
-from .forms import KundenauftragForm, Kd_formset, Prod_formset, MerkmaleForm, UrblattForm,KomponenteForm
+from .forms import KundenauftragForm, Kd_formset, Prod_formset, MerkmaleForm, UrblattForm, KomponenteForm
 from django.contrib.auth.models import User, Group
 from django_select2.forms import Select2Widget
-
 
 
 class MaterialWidget(Select2Widget):
@@ -19,6 +18,7 @@ class MaterialWidget(Select2Widget):
         if attrs:
             default_attrs.update(attrs)
         super().__init__(attrs=default_attrs)
+
 # ------------------------
 # Startseite
 # ------------------------
@@ -38,6 +38,8 @@ def home(request):
 # ------------------------------
 # Hilfsfunktion für Benutzerrechte
 # ------------------------------
+# Hinweis: Diese Funktion user_can_edit() wird in der kundenauftragUpdate View nicht mehr benötigt, 
+# da die Logik in die Formulare verschoben wurde. Sie wird nur noch für die Listenansichten verwendet.
 def user_can_edit(user):
     group = user.groups.first()
     if not group:
@@ -57,13 +59,14 @@ def user_can_edit(user):
     return can_edit, readonly_fields
 
 
-
 # ------------------------------
 # Auftragslisten
 # ------------------------------
 @login_required
 def auftragsliste_nicht_geliefert_view(request):
+    # ... (Logik für die Listenansicht bleibt unverändert) ...
     theirdata = Kundenauftrag.objects.exclude(statuskundenauftrag__kd_auswahl__iexact="Geliefert")
+    # ... (Filterlogik unverändert, verwendet die alten related_names order_back_1/order_back_2) ...
     searchsuche = request.GET.get('searchsuche')
     materialsuche = request.GET.get('materialsuche')
     my_select = request.GET.get('my_select')
@@ -81,8 +84,8 @@ def auftragsliste_nicht_geliefert_view(request):
         theirdata = theirdata.filter(kundenname__kundennummer__icontains=kundennummer)
     if materialsuche:
         theirdata = theirdata.filter(
-            Q(order_back_1__bezeichnung__materialnummer__icontains=materials)
-            | Q(order_back_1__order_back_2__bezeichnung__materialnummer__icontains=materials)
+            Q(order_back_1__bezeichnung__materialnummer__icontains=materialsuche)
+            | Q(order_back_1__order_back_2__bezeichnung__materialnummer__icontains=materialsuche)
         )
     if fertigungsauftrag:
         theirdata = theirdata.filter(
@@ -113,7 +116,9 @@ def auftragsliste_nicht_geliefert_view(request):
 
 @login_required
 def auftragsliste_geliefert_view(request):
+    # ... (Logik für die Listenansicht bleibt unverändert) ...
     theirdata = Kundenauftrag.objects.filter(statuskundenauftrag__kd_auswahl__iexact="Geliefert")
+    # ... (Filterlogik unverändert, verwendet die alten related_names order_back_1/order_back_2) ...
     searchsuche = request.GET.get('searchsuche')
     materialsuche = request.GET.get('materialsuche')
     my_select = request.GET.get('my_select')
@@ -131,8 +136,8 @@ def auftragsliste_geliefert_view(request):
         theirdata = theirdata.filter(kundenname__kundennummer__icontains=kundennummer)
     if materialsuche:
         theirdata = theirdata.filter(
-            Q(order_back_1__bezeichnung__materialnummer__icontains=materials)
-            | Q(order_back_1__order_back_2__bezeichnung__materialnummer__icontains=materials)
+            Q(order_back_1__bezeichnung__materialnummer__icontains=materialsuche)
+            | Q(order_back_1__order_back_2__bezeichnung__materialnummer__icontains=materialsuche)
         )
     if fertigungsauftrag:
         theirdata = theirdata.filter(
@@ -189,18 +194,71 @@ class KundenauftragUpdate(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        base_url = reverse('kundenauftrag_bearbeiten', kwargs={'pk': self.object.pk})
+        # Name angepasst an Ihre urls.py
+        base_url = reverse('kundenauftrag_bearbeiten', kwargs={'pk': self.object.pk}) 
         params = self.request.GET.urlencode()
         return f"{base_url}?{params}" if params else base_url
 
 
 # ------------------------------
-# Kundenauftrag Update (Formset)
+# Kundenauftrag Update (Formset) - Optimiert
 # ------------------------------
 @login_required
 def kundenauftragUpdate(request, pk):
+    # Kundenauftrag holen
     kundenauftrag = get_object_or_404(Kundenauftrag, pk=pk)
-    formset = Kd_formset(request.POST or None, instance=kundenauftrag)
+    
+    # Hole alle Produkte des Kundenauftrags (Verwenden des related_name aus models.py)
+    products = kundenauftrag.order_back_1.all()
+    
+    # --- KORREKTE FORMSET-INITIALISIERUNG MIT form_kwargs ---
+    # Dies übergibt den User an die __init__ Methoden in forms.py
+    form_kwargs = {'user': request.user}
+
+    if request.method == "POST":
+        # Bei POST: data, instance, queryset und form_kwargs übergeben
+        formset = Kd_formset(request.POST, instance=kundenauftrag, queryset=products, form_kwargs=form_kwargs)
+    else:
+        # Bei GET: Nur instance, queryset und form_kwargs übergeben
+        formset = Kd_formset(instance=kundenauftrag, queryset=products, form_kwargs=form_kwargs)
+    # --- ENDE KORREKTE INITIALISIERUNG ---
+
+    # Debugging-Ausgabe (kann bleiben)
+    print(f"Kundenauftrag enthält {products.count()} Produkte.")
+    print(f"Anzahl der Form-Instanzen im Formset: {len(formset.forms)}")
+    for i, form in enumerate(formset.forms):
+        print(f"Form {i} - Instanz ID: {form.instance.id if form.instance else 'None'}")
+
+    # Benutzerrechte prüfen (nur für die POST-Logik benötigt)
+    user_groups = [g.name for g in request.user.groups.all()]
+    can_edit = "TVK" in user_groups or "PPS_MAWI" in user_groups
+
+    # Die manuelle Deaktivierungslogik in der View ist nun ÜBERFLÜSSIG
+    # und wurde entfernt. Die Logik liegt in forms.py.
+    readonly_fields = [] # Kann leer bleiben
+
+    # Speichern, wenn POST und Berechtigungen stimmen
+    if request.method == "POST" and can_edit and formset.is_valid():
+        # Die manuelle Speicherung sorgt für Robustheit
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.kundenauftrag = kundenauftrag
+            instance.save()
+        
+        print(f"Formset gespeichert für Kundenauftrag {kundenauftrag.id}")
+        
+        # Umleitung nach dem Speichern (Post/Redirect/Get Muster)
+        query_params = request.GET.copy()
+        query_params.pop('from', None)
+        query_string = query_params.urlencode()
+        
+        # Verwenden Sie den korrekten URL-Namen 'kundenauftrag_bearbeiten' aus urls.py
+        redirect_url = reverse('kundenauftrag_update', kwargs={'pk': kundenauftrag.pk})
+
+        if query_string:
+            return redirect(f"{redirect_url}?{query_string}")
+        else:
+            return redirect(redirect_url)
 
     # Bestimmen der "Zurück"-URL
     from_param = request.GET.get("from", "produktiv").lower()
@@ -211,51 +269,7 @@ def kundenauftragUpdate(request, pk):
         back_url = reverse("auftragsliste_nicht_geliefert")
         back_label = "PRODUKTIV"
 
-    # Aktuelle Query-Parameter
-    query_params = request.GET.copy() or request.POST.copy()
-    query_string = query_params.urlencode()
-
-    # Benutzerrechte
-    user_groups = [g.name for g in request.user.groups.all()]
-    can_edit = "TVK" in user_groups or "PPS_MAWI" in user_groups
-
-    # Felder, die TVK nur lesen darf
-    readonly_fields = []
-    restricted_fields = ["p_kalkpreis", "p_serviceanfrage", "p_endtermin", "p_fertigungsauftrag"]
-
-    if "TVK" in user_groups:
-        readonly_fields = restricted_fields
-
-        # Felder direkt im Formset deaktivieren
-        for form in formset.forms:
-            for field_name in restricted_fields:
-                if field_name in form.fields:
-                    form.fields[field_name].disabled = True
-                    form.fields[field_name].required = False  # optional, damit Speichern klappt
-
-    # Felder, die Produktion nur lesen darf
-    readonly_fields = []
-    restricted_fields = ["p_kalkpreis", "p_serviceanfrage", "p_endtermin", "p_fertigungsauftrag","bezeichnung","p_auftragsmenge","p_endtermin_wunsch"]
-
-    if "Produktion" in user_groups:
-        readonly_fields = restricted_fields
-
-        # Felder direkt im Formset deaktivieren
-        for form in formset.forms:
-            for field_name in restricted_fields:
-                if field_name in form.fields:
-                    form.fields[field_name].disabled = True
-                    form.fields[field_name].required = False  # optional, damit Speichern klappt
-
-    # Speichern, wenn POST und erlaubt
-    if request.method == "POST" and can_edit and formset.is_valid():
-        formset.save()
-        if query_string:
-            return redirect(f"{reverse('kundenauftrag_update', kwargs={'pk': kundenauftrag.pk})}?{query_string}")
-        else:
-            return redirect(reverse('kundenauftrag_update', kwargs={'pk': kundenauftrag.pk}))
-
-    # Kontext für Template
+    # Kontext für das Template
     context = {
         'kundenauftrag': kundenauftrag,
         'formset': formset,
@@ -263,13 +277,12 @@ def kundenauftragUpdate(request, pk):
         'readonly_fields': readonly_fields,
         'back_url': back_url,
         'back_label': back_label,
-        'query_string': query_string,
+        'query_string': request.GET.urlencode(),
         'mode_label': "KUNDENAUFTRAG",
         'user_name': request.user.username,
     }
 
     return render(request, 'app_auelb/auftrag_auffrischen.html', context)
-
 
 # ------------------------------
 # Produkt Update (Formset)
@@ -333,45 +346,56 @@ def produktUpdate(request, pk):
 
     return render(request, 'app_auelb/auftrag_auffrischen_1.html', context)
 
-# ------------------------
-# Komponenten update
-# ------------------------
+
+# ------------------------------
+# Komponenten Update
+# ------------------------------
 @login_required
 def komponenten_update(request, produkt_pk):
     produkt = get_object_or_404(Produkt, pk=produkt_pk)
-    formset = Prod_formset(request.POST or None, instance=produkt, user=request.user)
+    
+    # Hole alle Komponenten dieses Produkts
+    komponenten_qs = produkt.order_back_2.all() 
+
+    # --- KORREKTE FORMSET-INITIALISIERUNG MIT form_kwargs ---
+    form_kwargs = {'user': request.user}
+
+    if request.method == "POST":
+        # Bei POST: data, instance, queryset und form_kwargs übergeben
+        formset = Prod_formset(request.POST, instance=produkt, queryset=komponenten_qs, form_kwargs=form_kwargs)
+    else:
+        # Bei GET: Nur instance, queryset und form_kwargs übergeben
+        formset = Prod_formset(instance=produkt, queryset=komponenten_qs, form_kwargs=form_kwargs)
+    # --- ENDE KORREKTE INITIALISIERUNG ---
 
     # Berechtigungen
     user_groups = [g.name for g in request.user.groups.all()]
-    can_edit = "PPS_MAWI" in user_groups  # nur PPS darf editieren
+    # can_edit steuert, ob der "Speichern" Button angezeigt wird und ob die POST-Logik läuft
+    can_edit = "PPS_MAWI" in user_groups 
 
-    # Readonly-Felder definieren
-    readonly_fields = []
-    if "TVK" in user_groups or "Produktion" in user_groups or "Meister" in user_groups:
-        readonly_fields = [
-            'bezeichnung', 'k_auftragsmenge', 'k_fertigungsauftrag',
-            'k_endtermin', 'k_infofeld', 'statuskomponente'
-        ]
-
-        # Felder direkt im Formset deaktivieren
-        for form in formset.forms:
-            for field_name in readonly_fields:
-                if field_name in form.fields:
-                    form.fields[field_name].disabled = True
-                    form.fields[field_name].required = False
+    # Die manuelle Logik zur Deaktivierung der Felder wird HIER ENTFERNT.
+    # Sie liegt bereits in der KomponenteForm.__init__ in forms.py
 
     # Speichern, wenn erlaubt
     if request.method == "POST" and can_edit and formset.is_valid():
-        formset.save()
-        # optional: redirect zurück
-        return redirect('kundenauftrag_update', pk=produkt.kundenauftrag.pk)
+        # Die manuelle Speicherung für Robustheit
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.product = produkt # Stellen Sie sicher, dass die FK-Beziehung gesetzt ist
+            instance.save()
+            
+        print(f"Komponenten-Formset gespeichert für Produkt {produkt.id}")
+
+        # PRG Muster: Redirect zurück zur selben Seite, um das Formular zurückzusetzen (extra=1)
+        return redirect('komponenten_update', produkt_pk=produkt.pk)
 
     context = {
         'produkt': produkt,
         'formset': formset,
         'can_edit': can_edit,
-        'readonly_fields': readonly_fields,
+        'readonly_fields': [], # Leer lassen, die Logik liegt in forms.py
         'user_name': request.user.username,
+        'mode_label': "KOMPONENTEN"
     }
 
     return render(request, 'app_auelb/auftrag_auffrischen_1.html', context)
